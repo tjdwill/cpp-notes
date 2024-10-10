@@ -79,7 +79,7 @@ CompileFlags:
 
 ### CMake
 
-CMake has Qt-specific settings, so follow [the Qt documentation instructions](https://doc.qt.io/qt-6/cmake-manual.html) ([for Qt5](https://doc.qt.io/qt-5/cmake-get-started.html)). The most important part, however, is the setting of the `CMAKE_PREFIX_PATH` variable. This can be done in `cmake -D` invocations or set as an environment variable. If the latter, the command would be
+CMake has Qt-specific settings, so follow [the Qt documentation instructions](https://doc.qt.io/qt-6/cmake-manual.html) ([here for Qt5](https://doc.qt.io/qt-5/cmake-get-started.html)). The most important part, however, is the setting of the `CMAKE_PREFIX_PATH` variable. This can be done in `cmake -D` invocations or set as an environment variable. If the latter, the command would be
 
 ```bash
 $ export CMAKE_PREFIX_PATH=<Qt install directory>/<Qt version>/<architecture>
