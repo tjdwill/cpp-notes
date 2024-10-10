@@ -23,7 +23,7 @@ The increased disk space and specifying the `--clean-after-build` option on `vcp
 
 ## Attempt 3: Building from Source
 
-This attempt actually produced a working library. I followed the instructions on [building Qt from Git](https://wiki.qt.io/Building_Qt_5_from_Git) using [`qtbase`](https://github.com/qt/qtbase) instead of the mega-package. I also learned to both link a local library installation to my development tools and to compile a Qt program using CMake (and qmake as an alternative). The problem with this attempt, however, was that most resources about Qt that I found use `QtQML` instead of `QtWidgets`, and my installation didn't have the former. I tried to build the mega-package, but LLVM performed the [Lebron James block](https://www.youtube.com/watch?v=-zd62MxKXp8) again. So, while this method worked initially, it ultimately failed for my potential use-case.
+This attempt actually produced a working library. I followed the instructions on [building Qt from Git](https://wiki.qt.io/Building_Qt_5_from_Git) using [`qtbase`](https://github.com/qt/qtbase) instead of the mega-package. I also learned to both link a local library installation to my development tools and to compile a Qt program using CMake (and qmake as an alternative). The problem with this attempt, however, was that most resources about Qt that I found use `QtQML` instead of `QtWidgets`, and my installation didn't have the former. I tried to build the mega-package, but [LLVM James blocked me again](https://www.youtube.com/watch?v=-zd62MxKXp8). So, while this method worked initially, it ultimately failed for my potential use-case.
 
 ## Attempt 4: apt install
 
