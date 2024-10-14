@@ -1,5 +1,4 @@
 # Qt Basics
-
 Version: 5.15.2
 Module(s): Widgets
 
@@ -33,6 +32,8 @@ Signals and slots are connected via the `QObject::connect` static method. Note t
 
 So, when I saw that example code kept instantiating pointers to `QWidget`s instead of instantiating them directly, I paused because manual `new` means manual `delete` in my head. However, as long as the widget is connected to a parent, it will be handled once the parent is deleted. This allows heap-allocated widgets to be used with ease-of-mind. 
 According to KDAB's Jesper K. Pedersen, you want to heap-allocate widget-related objects in order to have them live longer than the current stack frame. Value-related objects such as `QString`s or `QColor`s, however, do not need to be heap allocated because they are primarily used for configuration via function calls (I'm paraphrasing and extrapolating here).
+
+To summarize, if the object in question has a parent, you're allocating it with `new`. 
 
 ## Layouts
 
