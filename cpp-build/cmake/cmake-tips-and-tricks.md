@@ -9,7 +9,7 @@ These are (unordered) recommended practices and small tips I've learned from rea
 
     ```bash
     # in project root
-    ln -rs build/compile_commands.json .`
+    ln -rs build/compile_commands.json .
     ```
 
 - If the project build is scripted, use `cmake --build` instead of invoking the build tool directly (ex. `ninja`). 
