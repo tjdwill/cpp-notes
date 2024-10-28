@@ -29,4 +29,10 @@ A *modeless* window is a window that is allowed to run independently. It doesn't
 
 Unless explicitly stated otherwise through the `setModal()` method, dialog windows are modeless if `show()` is called. Additionally, you want to make use of the *raise* and *activateWindow* methods to ensure that the window is both properly raised to the front of the window queue and active, even if the window is already non-hidden. When `exec()` is called instead of `show()`, the window is modal.
 
+## Modal vs. Modeless Windows
+
+A *modeless* window is a window that is allowed to run independently. It doesn't block the other windows. These windows typically have their signals connected to slots that implement some behavior or functionality. A modeless window allows the user to switch between it and other windows in the application at will. *Modal* windows, however, **do** block the other windows, effectively barring the application from running until the user is done with the window. Have you ever opened some dialog box in a program and attempted to click outside of it, only to have the window blink a few times and an alarm bell sound trigger? That was a modal window.
+
+Unless explicitly stated otherwise through the `setModal()` method, dialog windows are modeless if `show()` is called. Additionally, you want to make use of the *raise* and *activateWindow* methods to ensure that the window is both properly raised to the front of the window queue and active, even if the window is already non-hidden. When `exec()` is called instead of `show()`, the window is modal.
+
 
