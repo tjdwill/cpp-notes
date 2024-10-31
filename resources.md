@@ -21,8 +21,8 @@ This is a list of interesting and helpful blog posts, articles, and videos regar
 **Note**: B2B = "Back to Basics"
 
 - [B2B: Desiging Classes](https://www.youtube.com/watch?v=motLOioLJfg)
-- [B2B: Move Semantics](https://youtu.be/St0MNEU5b0o?si=J33yYe4Y3aSI_bFR)(Klaus Iglberger)
-- [B2B: Move Semantics](https://youtu.be/Bt3zcJZIalk?si=rWVa5dcmWaBIcbkv)(Nicolai Josuttis)
+- [B2B: Move Semantics](https://youtu.be/St0MNEU5b0o?si=J33yYe4Y3aSI_bFR) (Klaus Iglberger)
+- [B2B: Move Semantics](https://youtu.be/Bt3zcJZIalk?si=rWVa5dcmWaBIcbkv) (Nicolai Josuttis)
 - [Exceptions in C++: Better Design Through Analysis of Real World Usage](https://youtu.be/HXJmrMnnDYQ?si=jUwImaJ6PRLAphJz)
-- [B2B: Smart Pointers](https://youtu.be/YokY6HzLkXs?si=48PV_AWQm1Z7NsKp)(David Olsen)
-- [B2B: Classic STL](https://youtu.be/tXUXl_RzkAk?si=LkcoHJ10c5jfePVF)(Bob Steagall)
+- [B2B: Smart Pointers](https://youtu.be/YokY6HzLkXs?si=48PV_AWQm1Z7NsKp) (David Olsen)
+- [B2B: Classic STL](https://youtu.be/tXUXl_RzkAk?si=LkcoHJ10c5jfePVF) (Bob Steagall)
