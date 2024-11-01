@@ -23,7 +23,7 @@ void print(std::string const& s);  // free function that doesn't modify its inpu
 class Bar {
     auto count() const -> int;     // const member function that returns some count.
     auto update(int amount);       // non-const member function. Const objects calling this
-                                      function results in a compile-time error.
+                                   // function results in a compile-time error.
 }
 ```
 
