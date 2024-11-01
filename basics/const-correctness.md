@@ -24,7 +24,7 @@ class Bar {
     auto count() const -> int;     // const member function that returns some count.
     auto update(int amount);       // non-const member function. Const objects calling this
                                    // function results in a compile-time error.
-}
+};
 ```
 
 Note where I wrote the `const` keywords. For member functions, the keyword comes after the
