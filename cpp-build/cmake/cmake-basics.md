@@ -59,3 +59,61 @@ For a given target (via [`add_executable()`](https://cmake.org/cmake/help/latest
 - PRIVATE: the library is only used internally as an implementation detail. The dependency isn't exposed to the user.
 - PUBLIC: the library is required to use the target (used internally and in interface)
 - INTERFACE: Components of the library are used in the interface of the target.
+
+## Bring in Subdirectories
+
+We can organize our build process into a tree of `CMakeLists.txt` files. Meaning, we don't have to put everything in our top-level CMakeLists; we can modularize our build, importing the submodules as desired (note here that I am not referring to CMake's concept of modules; I simply mean the breaking the build into subcomponents).
+
+To do so, we have (at least) two options: `add_subdirectory()` and `include()`. 
+
+### `add_subdirectory()`
+
+This function executes the contents of a CMakeLists.txt file located in some specified directory. Typically, this directory is a sub-directory of the project's source tree. The path to said directory can be either absolute or relative to the current *source* directory (see [the special variables section](#special-variables)). 
+
+`add_subdirectory()` creates a new scope when processing the relevant CMakeLists file. This scope is a child scope to the calling scope. The rules regarding variables are similar to those for `block()` invocations. 
+
+1. The child gets a copy of all variables from the calling scope.
+2. Variables created in the child scope are local to that scope (not visible to parent).
+3. Changes to a variable in child scope are local to said scope (unless `PARENT_SCOPE` is specified).
+
+Note that it is unnecessary to call `project()` in a nested CMakeLists.txt file. 
+
+### `include()
+
+According to [this link in the CMake email list](https://cmake.org/pipermail/cmake/2007-November/017897.html), `include()` is used similarly to `#include` in a C/C++ context. If we want, for example, to make common utility functions or target recipes availabe to the entire project, we'd include the relevant `.cmake` file at the root.
+
+That being said, it should be clear that the command expects a file path in contrast to `add_subdirectory()` expecting a directory path. Another form of `include()` accepts a module name, but the book postpones that topic for later.
+
+Included files don't *have* to be `.cmake` files, but they typically are. 
+Unlike `add_subdirectory()`, `include()` does *not* begin a new variable scope (though both begin new policy scopes), nor does it change the current source and binary directories. As a result, CMake provides three additional read-only variables (see the [special variables section](#special-variables). These variables provide the directory path of the included file, the file's path, and the line number of the inclusion operation in the current CMakeLists file.
+
+## Special Variables
+
+The following four path variables always resolve to absolute paths:
+
+- `CMAKE_SOURCE_DIR`: the top-most directory of the *source* tree (where the top-level CMakeLists.txt is located). Never changes in value.
+- `CMAKE_BINARY_DIR`: the top-most directory of the *build* tree. Never changes in value.
+- `CMAKE_CURRENT_SOURCE_DIR`: the directory of the current CMakeLists.txt being processed. This changes with calls to `add_subdirectory()`.
+- `CMAKE_CURRENT_BINARY_DIR`: the build directory corresponding to the current CMakeLists.txt being processed. Changes with calls to `add_subdirectory()`.
+
+- `CMAKE_CURRENT_LIST_DIR`: Get directory of the listfile being processed (abs path)
+- `CMAKE_CURRENT_LIST_FILE`: Get absolute path of the listfile.
+- `CMAKE_CURRENT_LIST_LINE`: Current line number of the file being processed.
+
+- `PROJECT_SOURCE_DIR`: The source directory of the most recent call to `project()` in the current scope or any parent scope.
+- `PROJECT_BINARY_DIR`: Build directory analogue to `PROJECT_SOURCE_DIR`
+- `projectName_SOURCE_DIR`: The source directory of the most recent call to `project(projectName)` in the current scope or any parent scope.
+- `projectName_BINARY_DIR`: Build directory analogue to `projectName_SOURCE_DIR`.
+
+
+The following variables are only compatible with CMake 3.21 or later.
+- `PROJECT_IS_TOP_LEVEL`: determines if the most recent call to `project()` was in the top level CMakeLists file.
+- `<project_name>_IS_TOP_LEVEL`: Cache variable. Similar function to `PROJECT_IS_TOP_LEVEL`
+
+
+### Useful Cache Variables 
+
+For variables I know I won't remember.
+
+- `CMAKE_BUILD_TYPE`: Sets the build type for the project (ex. Debug or Release)
+    - Ex. Usage: `cmake -G Ninja -DCMAKE_BUILD_TYPE:String=Debug <src_path>`

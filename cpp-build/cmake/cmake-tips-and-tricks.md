@@ -14,3 +14,5 @@ These are (unordered) recommended practices and small tips I've learned from rea
 
 - If the project build is scripted, use `cmake --build` instead of invoking the build tool directly (ex. `ninja`). 
     - Rationale: Facilitates easy switching between generator types.
+
+- In lieu of `CMAKE_SOURCE_DIR` and the like, use the `PROJECT_SOURCE_DIR` line of variables for pathing for projects that may be included as a child to another CMake project. This will allow for the proper paths to be derived.
