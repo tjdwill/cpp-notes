@@ -78,7 +78,7 @@ This function executes the contents of a CMakeLists.txt file located in some spe
 
 Note that it is unnecessary to call `project()` in a nested CMakeLists.txt file. 
 
-### `include()
+### `include()`
 
 According to [this link in the CMake email list](https://cmake.org/pipermail/cmake/2007-November/017897.html), `include()` is used similarly to `#include` in a C/C++ context. If we want, for example, to make common utility functions or target recipes availabe to the entire project, we'd include the relevant `.cmake` file at the root.
 
@@ -116,4 +116,7 @@ The following variables are only compatible with CMake 3.21 or later.
 For variables I know I won't remember.
 
 - `CMAKE_BUILD_TYPE`: Sets the build type for the project (ex. Debug or Release)
-    - Ex. Usage: `cmake -G Ninja -DCMAKE_BUILD_TYPE:String=Debug <src_path>`
+  
+    ```bash
+    - cmake -G Ninja -DCMAKE_BUILD_TYPE:String=Debug <src_path>
+    ```
