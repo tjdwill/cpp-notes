@@ -96,6 +96,9 @@ This will allow CMake to find the Qt installation using the `find_package()` fun
 
 Be sure to list the Qt modules used as arguments to the `COMPONENTS` section of `find_package()`. The linked documentation provides well-written, easy-to-follow examples.
 
+**NOTE**: Also be aware that Qt requires an OpenGL implementation to build. CMake throws an
+error if it cannot do so. To fix this, [one solution is to install `libglew-dev`](https://stackoverflow.com/a/7843270).
+
 ### QtCreator
 
 To tell the QtCreator IDE where the Qt installation is, you [specify the location of the `qmake` executable binary](https://doc.qt.io/qtcreator/creator-project-qmake.html). To do so, go to 'Preferences' (the location of which depends on the version of QtCreator). Under 'Kit', click the 'Qt Versions' tab and click 'Add' under the Manual section. Then, browse to the path of `qmake`. In the context of this article's installation, the path is `$Qt/5.15.2/gcc_64/bin/qmake`.
@@ -119,4 +122,4 @@ Alternatively, you can add the directory `$Qt/Tools/QtCreator/bin` to your $PATH
 
 ---
 
-That's all for installing Qt.
+That's all for installing Qt. If you want the source code, check out [the code repository](https://code.qt.io).

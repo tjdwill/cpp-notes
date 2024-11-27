@@ -120,3 +120,9 @@ For variables I know I won't remember.
     ```bash
     - cmake -G Ninja -DCMAKE_BUILD_TYPE:String=Debug <src_path>
     ```
+
+## Properties
+
+- `INCLUDE_DIRECTORIES`: The list of directories used as header search paths. Paths must be absolute.
+- `COMPILE_DEFINITIONS`: I think this is a list of pre-processor macros?
+- `COMPILE_OPTIONS`: Any compiler flag that is neither a header search path nor a symbol definition.
