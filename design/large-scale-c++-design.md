@@ -11,6 +11,7 @@ Contents:
 - [Ground Rules](#ground-rules)
 - [Components](#components)
 - [Physical Hierarchy](#physical-hierarchy)
+- [Levelization](#levelization)
 - [Questions](#questions-and-thoughts)
 
 ---
@@ -177,12 +178,47 @@ boundaries.
 
 ## Physical Hierarchy
 
+Honestly, there's not much to write for this one. The main point of the chapter is about
+how physical hierarchy makes testing easier and how it enables distributed testing instead
+of one large test at the top hierarchy. Lakos also introduces a metric, *cumulative
+component dependency* (CCD) to quantify physical design. 
+
+**TODO**: Expound on topics when necessary.
+
+## Levelization
+
+This is the first chapter where we get into techniques for reducing cyclic dependencies.
+Lakos establishes that cyclic dependencies can arise in previously acyclic codebases due to
+increased feature requests (and associated time constraints). A design decision that may appear
+"convenient" could result in severe buyer's remorse down the line. 
+
+### Escalation
+
+The first technique J.L. discusses is *escalation*. This is the practice of taking
+interdependent functionality of cyclically-dependent components and elevating it to a
+higher level, potentially creating a new component in the process. For example, given two
+classes `Foo` and `Bar` that can mutually convert between each other, we can introduce a new
+class `FooBarConverter` in a higher-level component that does the same thing. The difference is, 
+`FooBarConverter` now depends on `Foo` and `Bar` components, and, after removing the
+relevant functions from the two original classes, `Foo` and `Bar` become mutually
+independent.
+
+### Demotion
+
+The analogue to escalation, *demotion* is the practice of extracting common functionality
+between (cyclic) components and placing them in a lower level component, potentially
+creating the component in the process. The example J.L. gives in the text is that of a
+common set of useful functions being extracted to a utility struct and placed lower in the
+hierarchy (`GeomUtilCore`). 
+
 ---
 
 ## Questions and Thoughts
 
 0. How do we begin to design a system? Obviously, we are unlikely to get it right the first
-time, but what are some common steps that occur when successfully designing a system, large
-or small?
+   time, but what are some common steps that occur when successfully designing a system,
+   large or small?
 1. What's the best include guard naming schema that minimizes collision and enables easy
    modification?
+
+
