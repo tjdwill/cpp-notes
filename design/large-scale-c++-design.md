@@ -187,10 +187,15 @@ component dependency* (CCD) to quantify physical design.
 
 ## Levelization
 
+Goal: Remove and preempt cyclic dependencies via levelization techniques.
+
 This is the first chapter where we get into techniques for reducing cyclic dependencies.
 Lakos establishes that cyclic dependencies can arise in previously acyclic codebases due to
 increased feature requests (and associated time constraints). A design decision that may appear
 "convenient" could result in severe buyer's remorse down the line. 
+
+> **Principle:** *Allowing two components to "know" about each other via `#include`
+> directives implies cyclic dependency.* 
 
 ### Escalation
 
@@ -198,7 +203,7 @@ The first technique J.L. discusses is *escalation*. This is the practice of taki
 interdependent functionality of cyclically-dependent components and elevating it to a
 higher level, potentially creating a new component in the process. For example, given two
 classes `Foo` and `Bar` that can mutually convert between each other, we can introduce a new
-class `FooBarConverter` in a higher-level component that does the same thing. The difference is, 
+class `FooBarConverter` in a higher-level component that performs the conversion instead. The difference is, 
 `FooBarConverter` now depends on `Foo` and `Bar` components, and, after removing the
 relevant functions from the two original classes, `Foo` and `Bar` become mutually
 independent.
@@ -210,6 +215,95 @@ between (cyclic) components and placing them in a lower level component, potenti
 creating the component in the process. The example J.L. gives in the text is that of a
 common set of useful functions being extracted to a utility struct and placed lower in the
 hierarchy (`GeomUtilCore`). 
+
+### Opaque Pointers
+
+Typically, when we think of using a type `T`, that type is used *in size*; the compiler
+needs to know `T`'s size and memory layout in order to compile the program successfully. 
+However, we can also use a type *in name only*. In this sense, we only store a pointer or
+reference to the type, never dereferencing the pointer or accessing the type's members or
+methods (all of which require the definition to be known).
+
+> **Definition**: A function (or component) `f` uses a type `T` *in size* if compiling the
+> body of `f` requires having first seen the definition of `f`. The entity uses the type
+> *in name only* if it can compile **without** needing to see the definition of `T`.
+
+- Using a type in size introduces a compile-time dependency on the component that defines
+  it.
+- Using a type in name only implies **no physical dependency**, even at link time.
+- If a component or function depends on another entity that *does* use `T` in size, it will
+  physically depend on the component defining `T` via transience.
+- *Opaque Pointer*: a pointer to a type whose definition is not included in the pointer's
+  translation unit.
+
+The idea here is that a class can store a pointer to some type without needed to know what
+the pointer points to. More explicitly, we can store memory addresses with no dependency so
+long as we don't attempt to interact with what's stored at that address. How is this
+useful for levelization?
+
+The example Lakos uses is that of a container whose containees store a pointer to the
+container. The container needs to know the definition of the containee type, so there's a
+dependency there. A cyclic dependency is introduced when the containee uses the pointer to
+the container substantively. One example of which is using the pointer to call a method of
+the container during the implementation of some containee method.
+
+To remove this cyclic dependency, Lakos recommends making the pointer opaque: 
+
+0. Remove the uses of the pointer, only allowing the pointer to be retrieved (and possibly
+   set).
+1. Escalate the removed functionality to the container itself, making it a static method
+   that takes the containee by reference (or pointer). Then, you can simply call the
+   container's method as done before.
+   ```cpp
+    /* INSTEAD OF */
+    // containee.cpp
+    //...
+    auto Containee::some_query() const -> int
+    {
+        return my_container()->get_val();  // requires the definition of the container
+    }
+
+    /* DO */
+    // container.hpp
+    class Containee;
+    class Container
+    {
+        //...
+        static auto get_val(Containee const& item) -> int;
+    };
+
+    // container.cpp
+    #include "container.h"
+    #include "containee.h"
+
+    auto Container::get_val(Containee const& item) -> int
+    {
+        return item.pointer()->get_val();
+    }
+  ``` 
+
+### Dumb Data
+
+> **Dumb Data**: Any kind of information that an object holds but does not know how to
+> interpret.
+
+This is the generalized concept of which the opaque pointer is an instance. The idea behind
+dumb data is to include data within a lower-level class that can only be interpreted by
+some entity in an upper-level class. the lower class doesn't interact or use the data in
+any way other than simple data retrieval operations. The upper class uses this data to
+implement some functionality. 
+
+To me, dumb data as used in the book is the practice of using simple data types (ex.
+`int`) to represent some information that can then be used by a higher-level entity that
+interprets that information. It's a form of encoding to obviate the need to introduce
+cyclic logical dependencies and/or physical dependencies.
+
+One problem with this method is that the programmer is reponsible for keeping track of what
+a given dummy value means. 
+
+> **Principle**: Dumb data can be used to break *in-name-only* dependencies, facilitate
+> testability, and reduce implementation size. However, opaque pointers can preserve both
+> type safety and encapsulation; dumb data, in general, cannot.
 
 ---
 
