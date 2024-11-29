@@ -35,6 +35,8 @@ target_link_libraries(myQtApp
 )
 ```
 
+## UIC Note
+
 Something to note is that when using auto-generated classes from QtDesigner (UIC),
 transient dependence on the generated header file doesn't work. It results in the following
 error:
@@ -54,3 +56,9 @@ The solution was to either write the include directive (*i.e.* `#include "ui_<wh
 name is>.h`) directly in the file in question or to list the file that already has the
 direct inclusion as a target dependency in the `add_executable` command.
 
+
+## RCC Note
+
+When using resources for your application, you need to add the `.qrc` file as a target
+dependency in the formula generating *the application*. So basically, when you finally
+create the executable, add the relevant `.qrc` files to the `add_executable()` command.
