@@ -62,3 +62,14 @@ direct inclusion as a target dependency in the `add_executable` command.
 When using resources for your application, you need to add the `.qrc` file as a target
 dependency in the formula generating *the application*. So basically, when you finally
 create the executable, add the relevant `.qrc` files to the `add_executable()` command.
+
+## AUTOMOC Note
+
+Reference: https://stackoverflow.com/a/49998741
+
+If defining a class in a `.cpp` file that inherits from a Qt class, we need to include the
+generated `moc` file manually in order to compile successfully. 
+
+For some `foo.cpp`, you would include `#include "foo.moc"` **after** all of the
+`Qt`-specific structures are defined. The above source recommends doing so at the end of
+the file.
