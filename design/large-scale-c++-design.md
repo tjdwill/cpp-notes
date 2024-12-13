@@ -305,6 +305,13 @@ a given dummy value means.
 > testability, and reduce implementation size. However, opaque pointers can preserve both
 > type safety and encapsulation; dumb data, in general, cannot.
 
+### Redundancy
+
+Sometimes, instead of adding a dependency via reuse, it may be more effective to simply
+repeat code in different components. When the cost of coupling outweighs the extent to
+which you use the reused component, consider whether or not it is actually worthwhile to
+add such a dependency.
+
 ---
 
 ## Questions and Thoughts
