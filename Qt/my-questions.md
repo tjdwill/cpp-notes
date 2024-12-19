@@ -62,3 +62,10 @@ allow higher-level objects to connect to relevant signals and slots. If the idea
 data members public is uncomfortable (and it is), remember that Qt Designer-generated
 classes make all data members `public`. I am proposing the same thing for classes I write
 myself. Do Qt things the Qt way.
+
+**Q: Are slots executed synchronously?**
+
+**A:** Read [this StackOverflow answer](https://stackoverflow/a/1264968) for details, but
+the basic idea is "basically yes" because the case in which this holds is the most common
+use-case for me. All QObjects belong to the same thread, so the slots are executed
+asynchronously.
