@@ -54,7 +54,6 @@ If the capture clause has more than one element, the behavior modifier must be f
 
 - `[=, &foo, &bar]`: capture `foo` and `bar` by reference
 - `[&, foo, bar]`: capture `foo` and `bar` by value
-- `[&, foo, bar]` : captures `foo` and `bar` by value
 
 Note that a capture clause of form `[=, foo] [=, =foo]` or `[&, &bar]` are invalid.
 
