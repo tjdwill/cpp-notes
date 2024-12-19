@@ -46,7 +46,7 @@ still deleted later because it is set as a child of the enclosing custom class i
 Bottomline, the heap-based Qt style seems easier and more consistent.
 
 **Q: If creating an app that utilizes multiple constituent custom widgets, should the
-sub-widgets implement app logic?"
+sub-widgets implement app logic?**
 
 **A:** Personally, I think the answer is "no." After trying this the first time, I realized
 that I wouldn't have a way to coordinate actions implemented in the main widget. Also, if
