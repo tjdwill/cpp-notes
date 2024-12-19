@@ -254,7 +254,8 @@ To remove this cyclic dependency, Lakos recommends making the pointer opaque:
 1. Escalate the removed functionality to the container itself, making it a static method
    that takes the containee by reference (or pointer). Then, you can simply call the
    container's method as done before.
-   ```cpp
+
+    ```cpp
     /* INSTEAD OF */
     // containee.cpp
     //...
@@ -280,7 +281,7 @@ To remove this cyclic dependency, Lakos recommends making the pointer opaque:
     {
         return item.pointer()->get_val();
     }
-  ``` 
+    ```
 
 ### Dumb Data
 
