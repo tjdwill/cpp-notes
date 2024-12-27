@@ -69,3 +69,26 @@ myself. Do Qt things the Qt way.
 the basic idea is "basically yes" because the case in which this holds is the most common
 use-case for me. All QObjects belong to the same thread, so the slots are executed
 asynchronously.
+
+**Q: When using a layout, do I need to set the child widgets' parent upon each widget's
+construction?"
+
+**A:** No. [According to the
+documentation](https://doc.qt.io/qt-5/layout.html#tips-for-using-layouts), it is not
+necessary:
+
+> When you use a layout, you do not need to pass a parent when constructing the child
+> widgets. The layout will automatically reparent the widgets (using
+> [`QWidget::setParent()`](https://doc.qt.io/qt-5/qwidget.html#setParent)) so that they are
+> children of the widget on which the layout is installed.
+>
+>> **Note**: Widgets in a layout are children of the widget on which the layout is
+>> installed, not of the layout itself. Widgets can only have other widgets as parent, not
+>> layouts.
+>
+> You can nest layouts using addLayout() on a layout; the inner layout then becomes a child
+> of the layout it is inserted into.
+
+However, I would go further and say from personal experience that I only received the
+desired results when *not* setting the parent of the child widgets manually. Let the layout
+take care of it.

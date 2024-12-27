@@ -3,7 +3,7 @@
 - Transposing a temporary object leads to weird values (UB?). 
 - `transposeInPlace()` only works for square matrices.
 
-## Eigen Matrix <--> `std::vector` conversion
+## Eigen Matrix ↔ `std::vector` conversion
 
 - https://stackoverflow.com/questions/26094379/typecasting-eigenvectorxd-to-stdvector
 - https://stackoverflow.com/questions/39951553/is-it-possible-to-flatten-an-eigen-matrix-without-copying
