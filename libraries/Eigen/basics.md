@@ -1,8 +1,7 @@
 # Eigen Basics
 
 A lot of this document will be a rehash of [the
-documentation](https://eigen.tuxfamily.org/dox/group__DenseMatrixManipulation__chapter.html), but in
-my own words. 
+documentation](https://eigen.tuxfamily.org/dox/group__DenseMatrixManipulation__chapter.html), but in a structure designed with myself in mind. 
 
 ## Matrix 
 
