@@ -2,6 +2,8 @@
 
 - Transposing a temporary object leads to weird values (UB?). 
 - `transposeInPlace()` only works for square matrices.
+- If you want operations done on each coefficient, convert the matrix to an `Eigen::Array`.
+    - Perform the operation and then convert back.
 
 ## Eigen Matrix ↔ `std::vector` conversion
 
@@ -35,4 +37,8 @@ auto to_std_vec(Eigen::MatrixXd const& input) -> std::vector<double>
 }
 ```
 
+**Important Note**: It is important that you be able to pass in mutable references to the vector
+object. For some reason, Eigen code would not compile when I used a const reference to extract the
+vector data. There is likely some aspect of Eigen that I am missing.
 
+## Finding Coefficients with Specified Characteristics (Boolean Filtering)
