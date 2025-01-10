@@ -18,38 +18,38 @@ Add dependencies to the file.
 
 CMakePresets.json
 
-    ```json
+```json
+{
+  "version": 2,
+  "configurePresets": [
     {
-      "version": 2,
-      "configurePresets": [
-        {
-          "name": "vcpkg",
-          "generator": "Ninja",
-          "binaryDir": "${sourceDir}/build",
-          "cacheVariables": {
-            "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-          }
-        }
-      ]
+      "name": "vcpkg",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
     }
-    ```
+  ]
+}
+```
 
 CMakeUserPresets.json (leave out of version control):
 
-    ```json
-    {
-        "version": 2,
-        "configurePresets": [
-          {
-            "name": "default",
-            "inherits": "vcpkg",
-            "environment": {
-              "VCPKG_ROOT": "<path to vcpkg>"
-            }
-          }
-        ]
-    }
-  ```
+```json
+{
+    "version": 2,
+    "configurePresets": [
+      {
+        "name": "default",
+        "inherits": "vcpkg",
+        "environment": {
+          "VCPKG_ROOT": "<path to vcpkg>"
+        }
+      }
+    ]
+}
+```
 
 
 ## References
