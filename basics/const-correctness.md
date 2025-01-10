@@ -20,7 +20,8 @@ Easily, just use the `const` keyword:
 ```c++
 
 void print(std::string const& s);  // free function that doesn't modify its input
-class Bar {
+class Bar
+{
     auto count() const -> int;     // const member function that returns some count.
     auto update(int amount);       // non-const member function. Const objects calling this
                                    // function results in a compile-time error.
