@@ -4,7 +4,7 @@
 meant to be used is most likely going to result in frustration. On the other hand, spending all
     one’s time learning the theory about something without getting hands-on makes for a rather
     boring experience and often leads to an overly idealistic understanding. \- Craig Scott.
-    *Professional CMake: A Practical Guide*
+    *Professional CMake: A Practical Guide* (14<sup>th</sup> ed.)
 
 **Basic Flow**
 
@@ -205,3 +205,54 @@ provides a full list:
   absolute.
 - `COMPILE_DEFINITIONS`: I think this is a list of pre-processor macros?
 - `COMPILE_OPTIONS`: Any compiler flag that is neither a header search path nor a symbol definition.
+
+---
+
+## Compiler and Linker Essentials 
+
+**A note on CMake paradigm**:
+
+CMake was initially written in a cosmopolitan, global-scope oriented structure. Requirements were
+coarse, applying to a large selection of targets in that given scope (and those nested below it).
+Sometimes this more global method caused confusion due to the way variables work in CMake (see pg.
+175 \[15.5.4\] in *Professional CMake* by Craig Scott), requiring careful consideration and variable
+tracking to ensure the resulting build is faithful to the developer's intent.
+
+Modern CMake provides a new, inheritance-based paradigm that focuses on relationships between
+targets. Now, developers can specify properties and requirements for a given target `X`, and, assuming
+these requirements are made visible to other entities, targets that depend on `X` will inherit these
+requirements. This allows for a more fine-grained, organized approach.
+
+As a resuit of this fine-grained approach, compilation and linking are handled primarily through
+target properties now.
+
+
+### Compiler Flags
+
+There are three target properties that are crucial to controlling the compiler via CMake:
+
+- `INCLUDE_DIRECTORIES`: Specifies the search paths for headers
+- `COMPILE_DEFINITIONS`: Defines definitions for symbols used during preprocessing (macros)
+- `COMPILE_OPTIONS`: All other compiler flags can be specified here.
+
+Additionally, these three properties have `INTERFACE_<propery>` variants. This means that the values
+within these properties apply to *consumers* (dependents) of the target rather than the target
+itself. 
+
+However, none of these properties are manipulated directly. Instead, we use the provided CMake
+commands to do so:
+
+- `target_include_directories()`
+- `target_compile_definitions()`
+- `target_compile_options()`
+
+#### Visibility
+
+Now that we know about the fundamental compilation target properties, we can understand the more
+precise definition of CMake's visibility specifiers. If the developer passes `PRIVATE` to one of the
+relevant target property commands, the information only applies to *that* target; it is added to the
+non-INTERFACE property entry. If `INTERFACE` is passed, the information applies to the INTERFACE
+variant of the property (ex. `INTERFACE_INCLUDE_DIRECTORIES`). Finally, if `PUBLIC` is specified,
+the subsequent information is added to **both** property variants.
+
+More information is found in Ch. 15 of Scott.
