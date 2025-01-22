@@ -40,6 +40,50 @@ Sometimes, we actually *do* want to modify something within a const member funct
 some internal data member). The way to do this is by declaring the **data member** as
 `mutable`. This allows the data member to be modified even within `const` functions.
 
+## `const` and `auto`
+
+Because this has bitten me multiple times, I make a note here. If you want a constant (or mutable) reference to an object via `auto`, you **must** actually specify that on the declaration. So for example:
+
+```c++
+#include <iostream>
+#include <vector>
+
+
+void print_vec(std::vector<int> const& v)
+{
+    for (auto i: v)  // Value Semantics (COPIES)
+        std::cout << i << '\n';
+}
+
+int main()
+{
+    std::vector<int> v { 0, 1, 2, 3 };
+    print_vec(v);
+}
+```
+
+Each element in the vector is *copied*. To actually obtain a reference, we need to specify such:
+
+```c++
+#include <iostream>
+#include <vector>
+
+
+void print_vec(std::vector<int> const& v)
+{
+    for (auto const& i: v)  // Reference Semantics
+        std::cout << i << '\n';
+}
+
+int main()
+{
+    std::vector<int> v { 0, 1, 2, 3 };
+    print_vec(v);
+}
+```
+
+This is important to internalize, particularly in cases where you expect to modify some mutable object. `auto` would modify a *copy*, so the changes would not be reflected on the intended object. You would have to declare your worker variable's type as `auto&`.
+
 ## Helpful Reading
 
 - [ISOCPP Const Correctness](https://isocpp.org/wiki/faq/const-correctness)
