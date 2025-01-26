@@ -12,7 +12,7 @@ meant to be used is most likely going to result in frustration. On the other han
     [Configure -> Generate]                
 
 The central component of CMake is the `CMakeLists.txt` file. It is a platform-independent file that
-is processed by CMake to produce platform-specific build instructions. It is recommended ot use
+is processed by CMake to produce platform-specific build instructions. It is recommended to use
 CMake as an *out-of-source* build system, meaning users should distinguish between a *source*
 directory and a *binary* (build) directory. There are [many benefits to doing
 so](https://johnfarrier.com/in-source-vs-out-of-source-builds/), but the basic one is that you can
