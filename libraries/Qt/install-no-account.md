@@ -97,7 +97,7 @@ This will allow CMake to find the Qt installation using the `find_package()` fun
 Be sure to list the Qt modules used as arguments to the `COMPONENTS` section of `find_package()`. The linked documentation provides well-written, easy-to-follow examples.
 
 **NOTE**: Also be aware that Qt requires an OpenGL implementation to build. CMake throws an
-error if it cannot do so. To fix this, [one solution is to install `libglew-dev`](https://stackoverflow.com/a/7843270). For Fedora, the package is `mesa-libGL-dev`.
+error if it cannot do so. To fix this, [one solution is to install `libglew-dev`](https://stackoverflow.com/a/7843270). For Fedora, the package is `mesa-libGL-devel`.
 
 ### QtCreator
 
