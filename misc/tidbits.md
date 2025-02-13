@@ -64,7 +64,7 @@ Eventually, I was able to arrive at an answer. The thing about recursion is that
 recursive call, a new stack frame is allocated. This means that the state of the current frame has
 to be stored somewhere such that, upon return, we can continue execution. In other words, to
 successfully solve this problem using a stack implementation, I need to store both relevant
-parameters *and* the execution state. I did this with two stacks (This will be pseudocode-linke):
+parameters *and* the execution state. I did this with two stacks (This will be pseudocode-like):
 
 ```python
 def traverse(node):
