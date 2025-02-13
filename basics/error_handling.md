@@ -25,3 +25,5 @@ occurred, the error is still handled.
 
 Error codes form a classic error handling method. It's used extensively in C
 programming since C has no other error handling methods.
+
+# TBD
