@@ -2,6 +2,10 @@
 
 > A place to document my C++ journey
 
+**Note**: While the intention here is to document my C++ trajectory, it may also bleed into general Computer Science learning. Things like DSA, concurrency, memory-managment, abstraction, etc. are universal concepts in programming.
+
+---
+
 Learning C++ is difficult. There are conflicting "styles" (or rather "epochs") in the language such that two sets of competent programmers can work in a completely different, possibly conflicting ideas of what is acceptable. Bottom line, C++ is hard, and it is more reasonable to aim for competence rather than mastery. I think as long as I can achieve my goals using solid software design principles, data organization, and algorithms, I will be content. That being said, here is a list of topics I want to learn in order to learn C++:
 
 - Syntax (keywords, expressions, functions, classes, etc.)
