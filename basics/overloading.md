@@ -1,5 +1,7 @@
 # Overloading in C++
 
+Date: 26 February 2025
+
 C++ allows function overloading, meaning we can reuse names for functions. This allows us to
 implement multiple versions of the same function for convenience. An example of this is found in
 constructors. C++ allows us to specify more than one way of constructing a class by varying the
@@ -34,6 +36,10 @@ Common overloads include ([among others](https://en.wikipedia.org/wiki/Operators
 
 A great example of overloading the latter two operators `<<` and `>>` is found in the `iostream`
 library.
+
+**Update**: 
+
+Here is a GitHub Gist that is useful to view: https://gist.github.com/beached/38a4ae52fcadfab68cb6de05403fa393
 
 ### Member vs. Non-member Operator Overloads
 
