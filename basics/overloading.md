@@ -96,7 +96,7 @@ auto operator+ (intk, Foo const& f) -> RetType
 
 An exception to this rule is the spaceship operator `<=>` in which the compiler can generate the
 corresponding symmetric comparison function from the member function. 
-See the [Notes on Spaceship Operator](./spaceship_operator.md) for more information.
+See the [Notes on Spaceship Operator](./spaceship_operator.md#cool-actions) for more information.
 
 ## Resolution
 
