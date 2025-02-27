@@ -60,6 +60,10 @@ Note that a capture clause of form `[=, foo] [=, =foo]` or `[&, &bar]` are inval
 Also note that when defining lambdas within class member functions, we can capture `this`
 to access data members and methods.
 
+Finally, **Scott Meyers** (*Effective Modern C++*) recommends that we never use these default capture clauses `[=], [&]`. The
+latter makes it easy to have a dangling reference, and the former gets into implicit copying of the
+`this` pointer when using a member of a class in which the lambda is defined.
+
 ### Parameter List
 
 Written like a normal function's parameter list. Starting from C++14, you can also define a
