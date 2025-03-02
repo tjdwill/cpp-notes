@@ -45,6 +45,14 @@ From here, install the Qt version for your desired architecture
 5.15.2/ aqtinstall.log
 ```
 
+### Additional Libraries
+
+Qt requires a few additional libraries to allow applications to properly build. 
+
+1. **OpenGL implementation**: CMake throws an error if it cannot find it. To fix this, [one solution is to install `libglew-dev`](https://stackoverflow.com/a/7843270). For Fedora, the package is `mesa-libGL-devel`.
+2. **Vulkan**: For Qt6. Install `vulkan-headers` (Fedora)
+3. **XKB**: Install `libxkbcommon-devel`
+
 That's it!. Qt is now present on your local system.
 
 ## Linking to Tooling
@@ -95,9 +103,6 @@ $ export CMAKE_PREFIX_PATH="$Qt/5.15.2/gcc_64"
 This will allow CMake to find the Qt installation using the `find_package()` function.
 
 Be sure to list the Qt modules used as arguments to the `COMPONENTS` section of `find_package()`. The linked documentation provides well-written, easy-to-follow examples.
-
-**NOTE**: Also be aware that Qt requires an OpenGL implementation to build. CMake throws an
-error if it cannot do so. To fix this, [one solution is to install `libglew-dev`](https://stackoverflow.com/a/7843270). For Fedora, the package is `mesa-libGL-devel`.
 
 ### QtCreator
 
