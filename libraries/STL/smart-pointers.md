@@ -74,12 +74,12 @@ not keep the object alive.
   will think it has sole ownership. If you want to make more shared_ptrs from an object, pass in the
   owning shared_ptr:
 
-    ```c++
-    int* a = new int;
-    shared_ptr<int> sptr0 {a};
-    // shared_ptr<int> sptr1 {a};  // BAD
-    shared_ptr<int> sptr1 {sptr0}; // OK
-    ```
+	```cpp
+	int* a = new int;
+	shared_ptr<int> sptr0 {a};
+	// shared_ptr<int> sptr1 {a};  // BAD
+	shared_ptr<int> sptr1 {sptr0}; // OK
+	```
 - Watch out for circular references in which two objects each have shared_pointers of the other. 
     - The ref count will never be 0, so the objects are never destroyed.
     - Use a `std::weak_ptr` for one of them.
