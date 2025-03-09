@@ -16,7 +16,7 @@ Add dependencies to the file.
 
 3. Setup `CMakePresets.json` and `CMakeUserPresets.json`
 
-CMakePresets.json
+`CMakePresets.json`
 
 ```json
 {
@@ -34,7 +34,7 @@ CMakePresets.json
 }
 ```
 
-CMakeUserPresets.json (leave out of version control):
+`CMakeUserPresets.json` (leave out of version control):
 
 ```json
 {

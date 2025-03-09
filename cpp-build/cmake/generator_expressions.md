@@ -53,7 +53,6 @@ $<CONFIG:Debug>  # 1 if true; 0 if false
 Using this, we can build an expression that conditionally sets some property:
 
 ```cmake
-
 set(compFlags <some flags here>)
 # Assume some target MyTarget exists
 target_compile_options(MyTarget PUBLIC

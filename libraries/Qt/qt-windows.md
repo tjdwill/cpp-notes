@@ -29,3 +29,39 @@ A *modeless* window is a window that is allowed to run independently. It doesn't
 
 Unless explicitly stated otherwise through the `setModal()` method, dialog windows are modeless if `show()` is called. Additionally, you want to make use of the *raise* and *activateWindow* methods to ensure that the window is both properly raised to the front of the window queue and active, even if the window is already non-hidden. When `exec()` (or `open()`) is called instead of `show()`, the window is modal.
 
+## QMainWindow
+
+The `QMainWindow` class represents the main application window. Here is [the general layout](https://doc.qt.io/qt-6/qmainwindow.html#qt-main-window-framework):
+
+    ---------------------------------------------
+    | Menu Bar                                  |
+    ---------------------------------------------
+    |                 Toolbars                  | 
+    |    ---------------------------------      | 
+    |    |    |                     |    |      |
+    |    |    |     Dock Widgets    |    |      | 
+    |    |    |                     |    |      |
+    |    ---------------------------------      |
+    |    |    |                     |    |      |
+    |    |    |                     |    |      |
+    |    |    |    Central Widget   |    |      |
+    |    |    |                     |    |      |
+    |    ---------------------------------      |
+    |    |    |                     |    |      |
+    |    |    |                     |    |      |
+    |    ---------------------------------      |
+    |                                           |
+    ---------------------------------------------
+    | Status Bar                                |
+    ---------------------------------------------
+
+One of the most important aspects of the main window of an application is its menu. `QMainWindow`
+keeps its own menubar as a data member (of type `QMenuBar`). To interact with it (adding or removing
+menus), use the `menuBar()` method. If needed, this method instantiates the `QMenuBar` and sets the
+main window as its parent. Ultimately, the method returns a pointer to the `QMenuBar` to be used as
+desired. Should the user want to set their *own* custom menu bar instead, use the `setMenuBar()`
+method.
+
+Additionally, QMainWindow allows the addition of toolbars via `addToolBar()`, dock widgets (windows
+that can be docked into the main window) via `addDockWidget()`, and a status bar with `setStatusBar`
+(or initialize a default via calling `statusBar()`)

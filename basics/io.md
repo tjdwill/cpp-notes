@@ -21,7 +21,7 @@ When parsing text in which we need to include spaces (ex. parsing a user-input s
 configuration of the `istream` entity. By default, istreams skip whitespace, so you want to
 change to taking whitespace into consideration:
 
-```c++
+```cpp
 #include <sstream>
 
 std::istringstream iss { "Some basic string"  };
@@ -46,7 +46,7 @@ Basically, the way it works is that you pass in the string to parse as well as t
 of a string to store the remaining unparsed text. From experience, the function appeas to
 stop as soon as it reaches an invalid character.
 
-```c++
+```cpp
 #include <cassert>
 #include <iostream>
 #include <sstream>

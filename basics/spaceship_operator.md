@@ -31,7 +31,7 @@ values](https://brevzin.github.io/c++/2019/07/28/comparisons-cpp20/#a-new-orderi
 
 All three category objects are compared to the zero literal `0` to evaluate the expression:
 
-```c++
+```cpp
 strong_ordering::less < 0     // true
 strong_ordering::less == 0    // false
 strong_ordering::less != 0    // true

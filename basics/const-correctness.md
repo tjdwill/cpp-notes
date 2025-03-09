@@ -17,8 +17,7 @@ object is not modified during their execution.
 
 Easily, just use the `const` keyword:
 
-```c++
-
+```cpp
 void print(std::string const& s);  // free function that doesn't modify its input
 class Bar
 {
@@ -44,7 +43,7 @@ some internal data member). The way to do this is by declaring the **data member
 
 Because this has bitten me multiple times, I make a note here. If you want a constant (or mutable) reference to an object via `auto`, you **must** actually specify that on the declaration. So for example:
 
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 
@@ -64,7 +63,7 @@ int main()
 
 Each element in the vector is *copied*. To actually obtain a reference, we need to specify such:
 
-```c++
+```cpp
 #include <iostream>
 #include <vector>
 

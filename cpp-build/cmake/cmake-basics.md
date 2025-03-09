@@ -1,10 +1,11 @@
 # CMake Basics
 
 > Attempting to use any tool before understanding at least the basics of what it does and how it is
-meant to be used is most likely going to result in frustration. On the other hand, spending all
-    one’s time learning the theory about something without getting hands-on makes for a rather
-    boring experience and often leads to an overly idealistic understanding. \- Craig Scott.
-    *Professional CMake: A Practical Guide* (14<sup>th</sup> ed.)
+> meant to be used is most likely going to result in frustration. On the other hand, spending all
+> one’s time learning the theory about something without getting hands-on makes for a rather
+> boring experience and often leads to an overly idealistic understanding.
+>
+> \- Craig Scott. *Professional CMake: A Practical Guide* (14<sup>th</sup> ed.)
 
 **Basic Flow**
 
@@ -165,7 +166,7 @@ For variables I know I won't remember.
 - `CMAKE_BUILD_TYPE`: (STRING) Sets the build type for the project (ex. Debug or Release)
   
     ```bash
-    - cmake -G Ninja -DCMAKE_BUILD_TYPE:String=Debug <src_path>
+    $ cmake -G Ninja -DCMAKE_BUILD_TYPE:String=Debug <src_path>
     ```
 
 - `BUILD_SHARED_LIBS`: (BOOL) controls whether libraries are compiled and linked to be static or

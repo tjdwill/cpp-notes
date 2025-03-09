@@ -13,8 +13,7 @@ I expect to mutate an object, only to have mutated a copy. Both occasions of thi
 was due to lack of specifiers when declaring an `auto` variable. To fix, ensure you attach
 the reference specifier to the declaration:
 
-```c++
-
+```cpp
 auto var = obj.get_mut(); // will return a copy!
 
 auto& var = obj.get_mut(); // will return a reference!

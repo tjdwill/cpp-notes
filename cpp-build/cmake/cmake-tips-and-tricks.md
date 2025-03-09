@@ -7,7 +7,7 @@ experimentation.
   encourages good cross-compilation practices.
 
 - `set(CMAKE_EXPORT_COMPILE_COMMANDS ON)` generates a `compile_commands.json` file that can then be
-  used for tools like clangd.
+  used for tools like `clangd`.
     - It's helpful to create a (relative) symbolic link to the file to keep it updated: 
 
     ```bash
