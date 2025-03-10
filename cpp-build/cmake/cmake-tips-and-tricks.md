@@ -24,13 +24,14 @@ experimentation.
   the proper paths to be derived.
 
 - WINDOWS: by default, Windows applications will open a cmd window. If your application is a GUI
-  executable, you can disable this behavior by specifying the [`WIN32_EXECUTABLE`](https://cmake.org/cmake/help/latest/prop_tgt/WIN32_EXECUTABLE.html#win32-executable) property on your
-  target. This property does not affect behavior on other platforms.
+  executable, you can disable this behavior by specifying the
+  [`WIN32_EXECUTABLE`](https://cmake.org/cmake/help/latest/prop_tgt/WIN32_EXECUTABLE.html#win32-executable)
+  property on your target. This property does not affect behavior on other platforms.
 
 ## Dynamic Compilation Database Linking
 
-Sometimes, you may want to keep the top-level `compile_commands.json` up-to-date with whatever config preset you are building with.
-To do so, we use `execute_process()`:
+Sometimes, you may want to keep the top-level `compile_commands.json` up-to-date with whatever
+config preset you are building with. To do so, we use `execute_process()`:
 
 ```cmake
 if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
