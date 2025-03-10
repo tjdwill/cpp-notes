@@ -94,7 +94,7 @@ auto operator+ (int k, Foo const& f) -> RetType;
 Where the latter implementation can just call the previous one with the arguments swapped:
 
 ```cpp
-auto operator+ (intk, Foo const& f) -> RetType
+auto operator+ (int k, Foo const& f) -> RetType
 {
     return f + k;  // calls operator +(Foo const&, int);
 }
