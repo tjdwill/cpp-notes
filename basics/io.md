@@ -1,25 +1,24 @@
 # C++ I/O
 
-In C++, I/O is done via streams. For the standard input, output, and error Files, you'd
-want to use `<iostream>` and the `std::cin`, `std::cout`, and `std::cerr` entities.
+In C++, I/O is done via streams. For the standard input, output, and error Files, you'd want to use
+`<iostream>` and the `std::cin`, `std::cout`, and `std::cerr` entities.
 
 For files, there's `[io]fstream`. For building strings, there is `<sstream>` and the related
-`[io]stringstream` classes. These types all live within a hierarchy, deriving from
-lower-level base classes. More information can be found [on cppreference](https://en.cppreference.com/w/cpp/io).
+`[io]stringstream` classes. These types all live within a hierarchy, deriving from lower-level base
+classes. [More information can be found on cppreference](https://en.cppreference.com/w/cpp/io).
 
 
 ## Tips
 
 ### Parsing by line
 
-Use the [`std::getline()`
-function](https://en.cppreference.com/w/cpp/string/basic_string/getline).
+Use the [`std::getline()` function](https://en.cppreference.com/w/cpp/string/basic_string/getline).
 
 ### Parsing literal text
 
-When parsing text in which we need to include spaces (ex. parsing a user-input string), you'd want to change the default
-configuration of the `istream` entity. By default, istreams skip whitespace, so you want to
-change to taking whitespace into consideration:
+When parsing text in which we need to account for whitespace (ex. parsing a user-input string or a
+file format), you'll want to change the default configuration of the `istream` entity. By default,
+`istream`s skip whitespace, so you want to disable that behavior:
 
 ```cpp
 #include <sstream>
@@ -38,13 +37,13 @@ here](https://en.cppreference.com/w/cpp/io/ios_base/fmtflags).
 ### Parsing floating-point numbers
 
 In order to parse doubles, we use the
-[`std::strtod`](https://en.cppreference.com/w/cpp/string/byte/strtof) function. This is a
-wrapper to the C function of the same name, so it deals with C-style strings.
+[`std::strtod`](https://en.cppreference.com/w/cpp/string/byte/strtof) function. This is a wrapper to
+the C function of the same name, so it deals with C-style strings.
 
 
-Basically, the way it works is that you pass in the string to parse as well as the address
-of a string to store the remaining unparsed text. From experience, the function appeas to
-stop as soon as it reaches an invalid character.
+Basically, the way it works is that you pass in both the string to parse and the address of a string
+whose purpose is to store the remaining unparsed text. From experience, the function appears to stop
+as soon as it reaches an invalid character.
 
 ```cpp
 #include <cassert>
