@@ -26,7 +26,7 @@ that inheriting types implement some behavior. In other words, they *can do* som
 where this was the *reason* for using inheritance. 
 
 When I think about the concept's use in C++ and Python, it seems that the focus of
-inheritance is on a class' behavior, not its structure. An analog to this would be Rust's
+inheritance is on a class's behavior, not its structure. An analog to this would be Rust's
 concept of *traits*. Rust doesn't support inheritance, but it still achieves polymorphism
 via adherence to traits, defined behavioral specifications. Perhaps inheritance should be
 used to have a set of abstract types representing some behavior or operational concept

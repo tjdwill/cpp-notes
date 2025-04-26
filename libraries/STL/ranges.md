@@ -1,4 +1,4 @@
-C++ Ranges: A Non-Expert's Primer
+# C++ Ranges: A Non-Expert's Primer
 
 10 April 2025
 
@@ -80,7 +80,7 @@ There's a lot more to cover such as concepts, custom range implementation, proje
 
 - Watch Jeff Garland's [*Effective Ranges: A Tutorial for Using C++2x Ranges*](https://www.youtube.com/watch?v=QoaVRQvA6hI) talk. It's the most approachable resource I've come across for ranges thus far.
 - Read:
-	- Microsoft's material on [Ranges](https://learn.microsoft.com/en-us/cpp/standard-library/ranges?view=msvc-170)and  [Range Adaptors](https://learn.microsoft.com/en-us/cpp/standard-library/range-adaptors?view=msvc-170)
+	- Microsoft's material on [Ranges](https://learn.microsoft.com/en-us/cpp/standard-library/ranges?view=msvc-170) and  [Range Adaptors](https://learn.microsoft.com/en-us/cpp/standard-library/range-adaptors?view=msvc-170)
 	- Hannes Hauswedell's [*A beginner's guide to C++ Ranges and Views.*](https://hannes.hauswedell.net/post/2019/11/30/range_intro/) 
 	- *cppreference.com*
 		- [Ranges library](https://en.cppreference.com/mwiki/index.php?title=cpp/ranges&oldid=180956)

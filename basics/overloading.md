@@ -21,8 +21,8 @@ void foo(std::string s, std::vector<int> v);
 A result of overloading capability is *operator overloading*, where a developer can use C++ syntax
 such as `operator+` or `operator<<` to provide convenient syntax for their custom types. An example
 application of this is in linear algebra libraries. Instead of creating methods for addition and
-mulitplication, one can simply overload the `+` and `*` operators, providing the desired behavior
-while maintaining a nice syntax (which works to increase readibility).
+multiplication, one can simply overload the `+` and `*` operators, providing the desired behavior
+while maintaining a nice syntax (which works to increase readability).
 
 Common overloads include ([among others](https://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B#Operators)):
 
