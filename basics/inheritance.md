@@ -34,3 +34,48 @@ which are then inherited from to guarantee behavior in a concrete type?
 
 Think about the fact that even in implementation, the focus in C++ is primarily on methods
 (virtual or non-virtual); the focus is on the *behavior*. 
+
+## Access Specifiers and Inheritance
+
+First, let's review what the access specifiers are. An *access specifier* is a keyword that determines the level of access to a class member. We have three such specifiers: `public`, `private`, and `protected`. `public` members (data, functions, classes, enums, etc. ) are accessible by everyone. `private` members are only accessible by members within the class itself. Finally, `protected` members are accessible by class members *and* derived classes. By default, `class` members are `private`, and `struct` members are `public`.
+
+When inheriting from a class, one is able to specify the type of inheritance. Inheritance type specifies how a derived class exports the accessibility of derived members. There are three types: `public`, `private`, and `protected`. 
+
+```cpp
+class Foo
+{
+};
+class Bar : <access specifier> Foo  // inherit from `Foo`
+{
+};
+```
+
+`public` inheritance is the most commonly-used inheritance type (and the one you should select by default). If a class `Bar` inherits from `Foo` publicly,  any subsequent `Baz` that inherits from `Bar` will experience the same access of `Foo`'s members: `public` members remains `public`, `protected` members remain `protected`, and `private` members of `Foo` are still inaccessible to derived classes. 
+
+`protected` inheritance is the *least* used. Under this inheritance type, when `Bar` inherits `Foo`, `Foo`'s `public` members become `protected` to subsequent subclasses of `Bar`.
+
+Finally, with `private` inheritance, both `public` and `protected` members of `Foo` become `private` within `Bar`, such that these members are inaccessible to subclasses of `Bar`. This specification is the *language* default for classes, but we pretty much always inherit publicly in practice.
+### Access vs. Visibility
+
+It is important to note the distinction between "access" and "visibility".  Even if an entity has private access, it is still visible. In his talk about Back to Basics C++ Software Design, Klaus Iglberger gave an example of this distinction. Given the following:
+
+```cpp
+// https://godbolt.org/z/E9xMsW8ss
+class Foo
+{
+public:
+	auto foo(int x) const -> double;
+private:
+	auto foo(double x) const -> double;
+
+	int mX {};
+};
+
+int main()
+{
+	Foo test{};
+	test.foo(5.3);  // resolves to the private overload; compiler error
+}
+```
+
+When first encountering this example, I assumed the public method would be called, and the input argument narrowed into an `int`, but that assumption was incorrect. As we can see, the private method is still visible and selectable via name resolution, but it is inaccessible due to the `private` specifier, so the compiler throws. 
