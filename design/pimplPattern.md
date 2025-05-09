@@ -24,6 +24,7 @@ private:
 	std::unique_ptr<Private> dImpl;
 }
 ```
+
 We declare an incomplete class, `Foo::Private`, to serve as our private implementation. We then
 declare a unique pointer data member that owns the private implementation. Critically, `Foo`'s
 destructor is *declared* (but not defined) in the header file, to then be defined in the `.cpp`
