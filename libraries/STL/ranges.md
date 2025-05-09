@@ -56,9 +56,9 @@ Pretty nice!  One thing to note is that, due to internal caching, ranges cannot 
 
 I'm by no means an experienced user of ranges, but here are some useful functions and adaptors I've seen and/or used. Note that some of these are introduced in C++23:
 
-1. `views::filter`
-2. `views::transform`
-3. `views::split`
+1. `views::filter`: a [`view`](https://en.cppreference.com/w/cpp/ranges/view "cpp/ranges/view") that consists of the elements of a [`range`](https://en.cppreference.com/w/cpp/ranges/range "cpp/ranges/range") that satisfies a predicate
+2. `views::transform`: a [`view`](https://en.cppreference.com/w/cpp/ranges/view "cpp/ranges/view") of a sequence that applies a transformation function to each element
+3. `views::split`: a [`view`](https://en.cppreference.com/w/cpp/ranges/view "cpp/ranges/view") over the subranges obtained from splitting another [`view`](https://en.cppreference.com/w/cpp/ranges/view "cpp/ranges/view") using a delimiter
 4. `views::{all, iota}`
 5. `views::take`
 6. `views::cartesian_product`
@@ -76,6 +76,65 @@ Here are some useful range-based algorithms:
 7. `ranges::[all|any|none]_of`
 
 There's a lot more to cover such as concepts, custom range implementation, projections, and more, but I'm not there yet, especially with generic programming. Maybe in the future.
+## Interesting Uses
+### Range-based Iteration over Containers Simultaneously
+
+With a combination of [structured binding](https://en.cppreference.com/w/cpp/language/structured_binding) (C++17) and [`std::ranges::views::zip`](https://en.cppreference.com/w/cpp/ranges/zip_view) (C++23), we can iterate over multiple containers using range-based for loops (RBFL). The `zip` view creates a container in which the *i<sup>th</sup>* element is a tuple of the *i<sup>th</sup>* element of each constituent container. Its number of elements is the minimum of the number of elements across all constituent containers. Here is a modified example from CppReference:
+
+```cpp
+// https://godbolt.org/z/Pf66PcM1W
+#include <array>
+#include <iostream>
+#include <list>
+#include <ranges>
+#include <string>
+#include <tuple>
+#include <vector>
+ 
+void print(auto const rem, auto const& range)
+{
+    for (std::cout << rem; auto const& elem : range)
+        std::cout << elem << ' ';
+    std::cout << '\n';
+}
+ 
+int main()
+{
+    auto x = std::vector{1, 2, 3, 4};
+    auto y = std::list<std::string>{"α", "β", "γ", "δ", "ε"};
+    auto z = std::array{'A', 'B', 'C', 'D', 'E', 'F'};
+ 
+    print("Source views:", "");
+    print("x: ", x);
+    print("y: ", y);
+    print("z: ", z);
+ 
+    print("\nzip(x,y,z):", "");
+
+    // Structured Binding with Range-based for loops.
+    for (const auto& [num, str, chr] : std::views::zip(x, y, z))
+    {
+        std::cout << num << ' '
+                  << str << ' '
+                  << chr << '\n'; 
+    }
+}
+
+/*
+Output
+------
+Source views: 
+x: 1 2 3 4 
+y: α β γ δ ε 
+z: A B C D E F 
+
+zip(x,y,z): 
+1 α A
+2 β B
+3 γ C
+4 δ D
+*?
+```
 ## For more...
 
 - Watch Jeff Garland's [*Effective Ranges: A Tutorial for Using C++2x Ranges*](https://www.youtube.com/watch?v=QoaVRQvA6hI) talk. It's the most approachable resource I've come across for ranges thus far.

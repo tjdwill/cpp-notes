@@ -82,7 +82,7 @@ public:
 */
 
 //------------------------------------------------------------------------------
-// If we don't need implmentation details:
+// If we don't need implementation details:
 class Foo
 {
     /*  ...  */

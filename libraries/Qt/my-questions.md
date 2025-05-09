@@ -7,7 +7,7 @@ record questions that arise during practical use of the Qt framework.
 data members?**
     
 - Sometimes, the objects don't need further programmatic interaction after being instantiated.
-- Making every pointer a data member would also increase the class' size. 
+- Making every pointer a data member would also increase the class's size. 
 - On the other hand, *not* doing so would mean there can be many more pointers and "phantom" objects
   used within a widget than accounted for in the class definition.
   - If the design of the given class changes, it may be difficult to track down stray objects. What
@@ -36,7 +36,7 @@ changes when using propagation).
 **Q: Should function-scoped widgets be created on the stack or the heap (via `new`)?**
 
 **A:** After attempting to do this, especially when the widget itself has a variable number of
-component widgets based on a boolean, allocating on the heap is easier. If this temporary widget is
+component widgets based on a Boolean, allocating on the heap is easier. If this temporary widget is
 to be created and used within a custom `QWidget` subclass:
 
 - Create the widget with `this` as its parent.

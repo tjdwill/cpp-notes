@@ -42,6 +42,7 @@ Related: `<iterator>` and `<ranges>`.
  - `<random>`
  - `<cmath>`
    - Basic math functions
+* `<numeric>`
   
 ## Date and Time
 

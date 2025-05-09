@@ -2,7 +2,7 @@
 
 > A place to document my C++ journey
 
-**Note**: While the intention here is to document my C++ trajectory, it may also bleed into general Computer Science learning. Things like DSA, concurrency, memory-managment, abstraction, etc. are universal concepts in programming.
+**Note**: While the intention here is to document my C++ trajectory, it may also bleed into general Computer Science learning. Things like DSA, concurrency, memory-management, abstraction, etc. are universal concepts in programming.
 
 ---
 
@@ -46,7 +46,7 @@ Learning C++ is difficult. There are conflicting "styles" (or rather "epochs") i
     - Klaus Iglberger
     - Scott Meyers
     - How to structure projects logically and physically?
-    - Long term maintainence?
+    - Long-term maintenance?
     - How to release a project?
     - LICENSING?
 

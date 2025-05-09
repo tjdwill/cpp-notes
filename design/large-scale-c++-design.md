@@ -320,6 +320,7 @@ add such a dependency.
 0. How do we begin to design a system? Obviously, we are unlikely to get it right the first
    time, but what are some common steps that occur when successfully designing a system,
    large or small?
+	   In one of his many talks, one thing Lakos mentioned is to start at the "top" of the design and decompose each component/package until reaching the lower level. There will likely be common components at the bottom level that can be written to be reusable.
 1. What's the best include guard naming schema that minimizes collision and enables easy
    modification?
 

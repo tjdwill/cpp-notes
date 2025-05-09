@@ -14,7 +14,6 @@ behaviors for inheriting subclasses.  In C++, inheritance is often used to imple
 possibly-distinct types adheres to a common behavioral contract, we don't care which type
 among the set is in active use when invoking said behavior.
 
-
 ## When to use Inheritance
 
 **NOTE**: This will likely be revised and refined as I learn more.
@@ -79,3 +78,11 @@ int main()
 ```
 
 When first encountering this example, I assumed the public method would be called, and the input argument narrowed into an `int`, but that assumption was incorrect. As we can see, the private method is still visible and selectable via name resolution, but it is inaccessible due to the `private` specifier, so the compiler throws. 
+
+## `final`
+
+The [`final`](https://en.cppreference.com/w/cpp/language/final) keyword has two uses. When specified on a virtual function, it means this function cannot be overridden by derived classes. When used in a class definition, it means that class itself cannot be derived from. 
+
+## Additional Remarks
+
+- Because I had this question at one point, know that only one object is created when a derived object is constructed, even if base class constructors are called. One way to think about it is that the derived class has dedicated sections where base-class-relevant data goes. It's not 100% precise (or even accurate), but that way of thinking helped clarify the concept for me. 
