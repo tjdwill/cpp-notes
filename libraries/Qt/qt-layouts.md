@@ -4,8 +4,8 @@ Date: 11 May 2025
 
 As shown in [the basic notes](/libraries/Qt/basics.md#installing-a-layout), the layout system is
 simple to work as long as our use is a simple `addWidget()` call. However, when it comes to managing
-sizes and relative positioning between widgets in a given layout, we need to know a little more
-about how Qt thinks of size and the facilities provided to specify designer's intent.
+sizes and relative positions between widgets in a given layout, we need to know a little more
+about how Qt thinks of size as well as about the facilities provided to specify the designer's intent.
 
 ## Sizing 
 
