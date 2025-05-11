@@ -90,12 +90,12 @@ class MyCoolDisplay : QWidget
 {
 Q_OBJECT
 public:
-MyCoolDisplay(QWidget* parent=nullptr);
+    MyCoolDisplay(QWidget* parent=nullptr);
 
 private:
-// Keep an instance of the custom widget from QtDesigner
-// One could inherit from it instead, but the C++ community "prefer[s] composition over inheritance".
-::Ui::MyCoolDisplay d_Ui {};  
+    // Keep an instance of the custom widget from QtDesigner
+    // One could inherit from it instead, but the C++ community "prefer[s] composition over inheritance".
+    ::Ui::MyCoolDisplay d_Ui {};  
 };
 
 // ------------------------------------------------------------------------
