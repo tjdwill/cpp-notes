@@ -1,3 +1,4 @@
 *.swp
 ROS2
 .obsidian
+.vscode

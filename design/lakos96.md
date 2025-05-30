@@ -1,4 +1,4 @@
-# Large Scale C++ Design
+# Large Scale C++ Software Design
 
 Notes from John Lakos' book *Large Scale C++ Software Design* (1996), I found this book
 when searching for resources for actually designing, implementing, and maintaining software
