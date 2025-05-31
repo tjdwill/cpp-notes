@@ -6,15 +6,100 @@ Volume 1: Process and Architecture
 
 - *Component*: The smallest atomic unit of physical design (`.h`/`.cpp` pair in
   C++)  
-- *External linkage*: The idea that a logical entity is accessible outside of
-	its defining translation unit.  
-	- *Linkage*, as Lakos puts it, is "used to determine whether a given
-	declaration or definition refer to the same logcial entity" (pg. 159)  
-
+- *Linkage*, as Lakos puts it, is "used to determine whether a given declaration
+  or definition refer to the same logical entity" (pg. 159)  
+	- *External linkage*: The idea that a logical entity is accessible (even
+	definable) outside of the translation unit in which it's declared.  
+	- *Internal linkage*: The logical entity denoted by a declaration can be
+	defined in a different scope but not a different translation unit.  
+		- By default, the following have internal linkage:  
+			- `const` objects (unless declared `extern`)  
+			- `constexpr` objects  
+			- `typedef` objects (what about `using` type aliases?)  
+			- `static` objects in namespace scope  
+			- `static` functions  
+			- Anything in an unnamed namespace scope  
+	- *No linkage*: The entity must be defined in its declaration scope and
+	translation unit.
+- *Bindage*: Essentially, whether the compiler is responsible for resolving the
+  definition (internal bindage), the linker (external), or either (dual).
 
 ## The Four Fundamental Properties of a Component
 
+### Component Property 1
 
+>The `.cpp` file incorporates its corresponding `.h` file as the first
+>substantive line of code.  
+
+"Substantive" meaning "non-comment" . The primary reason Lakos suggests this is
+that every header will "compile in isolation," thereby removing an entire source
+of bugs from include order dependency (pg. 210). 
+
+To elaborate on the idea of the header compiling in isolation, consider how
+includes work. Upon reading a given include directive, the preprocessor opens
+that file and pastes its contents directly at the inclusion site, transforming
+the source file. Sometime later, the compiler begins processing the
+transformed/expanded source file. If the header is the first substantive line of
+code, its code is processed first, so any uses of undeclared symbols will be
+caught as a compilation error, signaling that the developer did not properly
+define the given header.
+
+The example Lakos uses is that of `std::ostream&`. If we have some `operator<<`
+overload declaration in a header:
+
+```cpp
+// foo.h
+// component_property_1
+#ifndef INCLUDED_FOO
+#define INCLUDED_FOO
+
+// No declaration of std::ostream!
+
+class Foo
+{
+public:
+	Foo();
+};
+
+auto operator<<(Foo const& object) -> std::ostream&;
+
+#endif // include guard
+```
+
+If we have some `.cpp` that includes `<ostream>` **before** `foo.h`, the
+compilation will still succeed because a declaration of `std::ostream` is found
+in `<ostream>` . However, if some `random_entity.cpp` includes `<foo.h>` alone,
+for example, the compilation will fail because `std::ostream` is never declared
+before its use. This is a subtle, potentially nasty bug that can take a long
+time to troubleshoot. Component property 1 precludes this scenario entirely.
+
+### Component Property 2
+
+> Logical constructs having external linkage defined in a `.cpp` file — and not
+> otherwise effectively rendered externally invisible — are declared in the
+> corresponding `.h` file.
+
+The purpose of this property is to prevent violations of the one definition rule
+(ODR). No component should export the definition of an externally-linked symbol
+without also exporting its declaration.
+
+### Component Property 3
+
+> Logical constructs having external or dual bindage that are declared within
+> the header file of a component, if defined at all, are defined within that
+> component only
+
+It makes little sense for a component X to depend on another component Y for the
+definition of an entity X declares (in a non-forward declaring context).
+
+### Component Property 4
+
+> There are no local “forward” declarations for a logical construct having
+> external or dual bindage defined (uniquely) by another component; instead, the
+> `.h` file of that component is `#include`-ed to obtain the needed declaration
+
+I think this is meant in the context of implementation files. Forward
+declarations of classes are valid within a header.
 
 ## 2.5 Component Source-Code Organization
 
@@ -233,3 +318,38 @@ auto xyza::operator<<(
 ```
 
 ## 2.6 Component Design Rules
+
+Here are some (not all) of the design rules Lakos establishes:
+
+### Design Imperatives
+
+- > Cyclic physical dependencies among components are not permitted.  
+- > Access to the private details of a logical construct must not span the
+  > boundaries of the physical aggregate in which it is defined — e.g.,
+  > “long-distance” (inter-component) friendship is not permitted.
+
+### Design Rules
+
+- > The `.h` file of each component must contain a unique and predictable
+  > include guard: **INCLUDED**_PACKAGE_COMPONENTBASE (e.g.,
+  > `INCLUDED_BDLT_DATETIME`).
+
+- > Any direct substantive use of one component by another requires the
+  > corresponding `#include` directive to be present directly in the client
+  > component (in either the `.h` or `.cpp` file, but not both) unless indirect
+  > inclusion is implied by intrinsic and substantial compile-time dependency —
+  > i.e., public inheritance (nothing else).
+
+### Guidelines
+
+- > The `.h` file should contain only those `#include` directives (or, where
+  > appropriate, local \[“forward”\] class declarations) necessary to ensure
+  > that the header file com- piles in isolation.
+- Reasons to include a header in another header (pg. 355):  
+	1. **Is-A** relationship (inheritance)  
+	2. **Has-A** relationship (composition; not Holds-A or
+	Uses-In-The-Interface)  
+	3. **Inline** (any object used substantively in an inline definition)  
+	4. **Enum**  
+	5. **Typedef** (to an explicit template specialization like `std::string` or
+	``std::vector`)  
