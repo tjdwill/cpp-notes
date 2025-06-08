@@ -3,7 +3,7 @@
 Date: 5 June 2025
 
 Recently, I ran into a problem that I want to take the time to write about. I
-had a static map of values define in a component, `foo`, and attempted to use
+had a static map of values defined in a component, `foo`, and I attempted to use
 this map to initialize another static map variable in component `bar`. 
 
 ```cpp
@@ -71,7 +71,6 @@ int main()
 }
 ```
 
-
 When executing the program, I received the following error:
 
 > **Exception thrown: read access violation. _Scary->_Myhead was nullptr**
@@ -84,13 +83,12 @@ research plunge.
 	
 ## Variables
 
-First, let's review variables for a bit. I took my knowledge for granted, but
-thinking about variables requires some precision in C++. For instance, I
-mistakenly believed that global variables are only variables defined at file
-scope. This is not the case. More accurately, any variable that is
-declared/defined outside of a function is a global variable. Meaning, a global
-variable lives in *namespace* scope (including the global namespace, a.k.a file
-scope).
+First, let's review variables for a bit. I thought I understood variables, but
+thinking about them requires more precision in C++. For instance, I mistakenly
+believed that global variables are only those variables defined at file scope.
+This is not the case. More accurately, any variable that is declared/defined
+outside of a function is a global variable. Meaning, a global variable lives in
+*namespace* scope (including the global namespace, a.k.a file scope).
 
 This is important because **global variables have
 [static storage duration](https://en.cppreference.com/w/cpp/language/storage_duration.html)**;
@@ -99,21 +97,22 @@ they live for as long as the program executes (and are initialized before
 
 ## `inline` specifier
 
-What is the `inline` specifier? Originally, it was a directive the compiler to
-insert the definition of an `inline`-specified function at any call site, aiding
-performance by precluding function call overhead. 
+What is the `inline` specifier? Originally, it was a directive telling the
+compiler to insert the definition of an `inline`-specified function at any call
+site of said function, aiding performance by precluding function call overhead. 
 
-However, in the modern era, the compiler basically inlines as it sees fit.
-Instead, `inline` is now used for the implication of the original use: an
-`inline` entity with external linkage is able to be defined multiple times. In
-other words, `inline`d entities are exempt from the One Definition Rule (ODR).
-The caveat is that all definitions must be identical. 
+However, in the modern era, the compiler basically inlines as it sees fit,
+regardless of whether the specifier is used or not. Instead, `inline` is now
+used for the implication of the original use: an `inline` entity with external
+linkage is able to be defined multiple times. In other words, `inline`d entities
+are exempt from the One Definition Rule (ODR). The caveat is that all
+definitions must be identical. 
 
 Typically, developers declare and define an `inline` function or variable in a
 header. Each TU that includes that header will effectively redefine that inlined
 entity, but the definition is guaranteed to be the same. I want to re-emphasize
-that: including a header that has an inlined entity *redefines* that entity at
-the inclusion site.
+this point: including a header that has an inlined entity *redefines* that
+entity at the inclusion site.
 
 ## Static Storage Initialization
 
@@ -164,9 +163,10 @@ has a chance of occurring.
 
 With all of the information above, let's return to the code sample. In `foo`, a
 static data member is defined. `bar`, a separate component/translation unit,
-defines a global variable that references the `foo` static data member. Both the
-static data member and the global variable are non-local variables with static
-storage duration,meaning they are to be initialized before `main` executes. 
+defines a global variable that references the `Foo::kNameFromId` static data
+member. Both the static data member and the global variable are non-local
+variables with static storage duration, meaning they are to be initialized
+before `main` executes. 
 
 However, because they live in separate TUs, there is no specified order in which
 these two variables, `Foo::kNameFromId` and `kDoubleFromName`, are to be
@@ -177,9 +177,9 @@ exist in this context.
 
 The de-facto method of solving this problem is to use the [*Construct on First
 Use*](https://isocpp.org/wiki/faq/ctors#static-init-order-on-first-use) idiom.
-Essentially, we would define that same `kDoubleFromName` map as a static
-variable of a function. The variable will be initialized on the first call to
-the function, which is *guaranteed* to happen *after* `main()` begins its
+Essentially, we would define that same `kDoubleFromName` map object as a static
+variable within a function. The variable will be initialized on the first call
+to the function, which is *guaranteed* to happen *after* `main()` begins its
 execution. As a result, `Foo::kNameFromId` will be initialized by the time
 `kDoubleFromName` (now a static variable in a function) is initialized. 
 
@@ -221,7 +221,7 @@ int main()
 
 ### Why Did The `inline` Solution Work?
 
-This solution also works:
+As noted previously, inlining `Foo:kNameFromId` also works as a solution:
 
 ```cpp
 // foo.h
@@ -285,13 +285,15 @@ int main()
 ```
 
 Remember, when we include the header that defines some `inline` entity, that
-entity is *redefined*. So, now `bar` has its own copy of that definition within
-the same translation unit. Additionally, based on the rules of static
-initialization, because the data member is inlined, it is partially-dynamic.
-Since the `#include` directive that defines `Foo::kNameFromId` appears before
-the definition of `kDoubleFromName`, `Foo::kNameFromId` will be initialized
-before `kDoubleFromName` in accordance to rule 2. In other words, the program is
-no longer susceptible to SIOF, making `inline` a potential solution. 
+entity is *redefined* in the translation unit including the header. So, `bar`
+now has its own copy of that definition `Foo::kNameFromId` that lives in the
+same TU as `kDoubleFromName`. Additionally, based on the rules of static
+initialization, the data member undergoes partially-dynamic initialization
+because it's inlined. Since the `#include` directive that defines
+`Foo::kNameFromId` appears *before* the definition of `kDoubleFromName`,
+`Foo::kNameFromId` will be initialized before `kDoubleFromName` in accordance
+with the associated rules. In other words, the program is no longer susceptible
+to SIOF, making `inline` a potential solution. 
 
 There is a discussion to be had about which solution is better architecturally,
 but my primary concern was understanding *why* the solutions work. I know have a
@@ -300,7 +302,9 @@ better understanding than I did before.
 ## References
 
 1. Pablo Arais: [*C++ - Initialization of Static Variables*](https://pabloariasal.github.io/2020/01/02/static-variable-initialization/)
+0. Pablo Arias: [*C++ - Inline Variables and Functions*](https://pabloariasal.github.io/2019/02/28/cpp-inlining/)
 0. cppreference: [*Static Initialization Order Fiasco*](https://en.cppreference.com/w/cpp/language/siof.html)
 0. cppreference: [*Initialization*](https://en.cppreference.com/w/cpp/language/initialization.html#Non-local_variables)
 0. cppreference: [*`inline` specifier*](https://en.cppreference.com/w/cpp/language/inline.html)
 0. ISOCPP: [*Constructors*](https://isocpp.org/wiki/faq/ctors#static-init-order)
+0. Learn C++: [*Inline functions and variables*](https://www.learncpp.com/cpp-tutorial/inline-functions-and-variables/)
