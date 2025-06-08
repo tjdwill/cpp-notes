@@ -43,9 +43,11 @@ if (CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux")
 endif()
 ```
 
-Place 
+Important to note that this command expects a list of strings instead of one
+long string.
 
 READ MORE:
+
  - https://cmake.org/cmake/help/book/mastering-cmake/chapter/Custom%20Commands.html
  - https://stackoverflow.com/a/59264495
  - https://cmake.org/cmake/help/latest/command/execute_process.html
