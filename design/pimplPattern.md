@@ -3,7 +3,7 @@
 Recently, I came across this design pattern that I want to write notes about. The *Pointer to
 Implementation*, or pImpl pattern is known by many names, including the "Cheshire Cat", "Opaque
 Pointer", and, for those familiar with the Gang of Four book on design patterns, the "Bridge
-Pattern". As a quick 411, encapsulation, data hiding, and speedy build times are all ideal sin the
+Pattern". As a quick 4-1-1, encapsulation, data hiding, and speedy build times are all ideal sin the
 C++ world, and the pImpl pattern provides a mechanism by which all three can be further achieved. 
 
 As I understand it, pImpl is a pattern in which the implementation details of a class are hidden,
