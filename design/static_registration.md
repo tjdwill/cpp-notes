@@ -165,7 +165,9 @@ If non-static objects are to be supported, the registry needs some mechanism by 
 Here is the implementation:
 
 ```cpp
+// https://godbolt.org/z/MPv9frG1K
 
+#include <cassert>
 #include <concepts>
 #include <forward_list>
 #include <functional>
@@ -174,6 +176,7 @@ Here is the implementation:
 #include <memory>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <variant>
 
 namespace cache {
@@ -285,13 +288,82 @@ template <typename T, typename Printer = std::ostream>
 auto operator<<(std::ostream& os, std::optional<T> const& opt)
     -> std::ostream& {
     if (opt) {
-        os << opt;
+        os << opt.value();
     } else {
         os << "NULLOPT";
     }
 
     return os;
 }
+static int sIntTest{27};
+static std::optional<std::string> sStringOpt{"This is a string."};
+
+static cache::CacheResetRegistrationAgent sIntAgent{
+    []() { sIntTest = {}; },
+    {
+        cache::ResetCondition::kFileSystemChanged,
+    }};
+static cache::CacheResetRegistrationAgent sStringAgent{
+    []() { sStringOpt = {}; },
+    {cache::ResetCondition::kFileSystemChanged,
+     cache::ResetCondition::kClockChanged}};
 }  // namespace
 
+int main() {
+    using Item =
+        std::variant<std::reference_wrapper<int>,
+                     std::reference_wrapper<std::optional<std::string>>>;
+    std::vector<Item> registeredStatics{std::ref(sIntTest),
+                                        std::ref(sStringOpt)};
+    auto printItem = [](auto&& wrappedItem) {
+        auto const& item = wrappedItem.get();
+        std::cout << "(Value, Address, Type): (" << item << ", " <<
+                  std::addressof(item) << ", " << typeid(item).name() << ")" << "\n";
+    };
+
+    std::cout << "Before\n------" << "\n";
+    for (const auto& item : registeredStatics) {
+        std::visit(printItem, item);
+    }
+
+    cache::CacheResetRegistry::resetCaches(
+        cache::ResetCondition::kClockChanged);
+
+    std::cout << "\nAfter\n-----" << "\n";
+    for (const auto& item : registeredStatics) {
+        std::visit(printItem, item);
+    }
+
+    // Test LOCAL
+    {
+        double someCachedValue{3.0 / 14.0};
+        const double previousValue{someCachedValue};
+
+        // The Registry agent can be made a data member of some class, but this
+        // just displays the raw use-case.
+        {
+            // Declare a named entity because a temporary immediately goes out
+            // of scope.
+            cache::CacheResetRegistrationAgent local{
+                [&someCachedValue]() { someCachedValue = {}; },
+                {cache::ResetCondition::kFileSystemChanged}};
+            assert(someCachedValue == previousValue && someCachedValue != 0);
+            cache::CacheResetRegistry::resetCaches(
+                cache::ResetCondition::kFileSystemChanged);
+            assert(someCachedValue == 0.0);
+
+            someCachedValue = previousValue;
+        }
+        // Prove the expired callback was removed.
+        assert(someCachedValue == previousValue && someCachedValue != 0);
+        cache::CacheResetRegistry::resetCaches(
+            cache::ResetCondition::kFileSystemChanged);
+        assert(someCachedValue == previousValue && someCachedValue != 0);
+    }
+
+    return 0;
+}
+
 ```
+
+Weak pointers take the value of null when the tracked object is destroyed. It's a great sigil for this use case where we want to be able to detect and remove invalid objects from the registry. I use a `std::forward_list` instead of a ``std::vector`` to store the weak_ptrs because of the structure's simplicity when removing items. 
