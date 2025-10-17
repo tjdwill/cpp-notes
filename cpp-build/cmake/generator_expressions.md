@@ -8,16 +8,16 @@ CMake processes the CMakeLists.txt file, building an internal representation of 
 for the selected build system are generated. The problem with the configuration phase is that
 certain properties and attributes are unknown at configure time when using a multi-generator system
 like Visual Studio or XCode. In these systems, the generator isn't selected until the generation
-phase, so properties such as `CMAKE_BUILD_TYPE` will have incorrect infromation if queried during
+phase, so properties such as `CMAKE_BUILD_TYPE` will have incorrect information if queried during
 configuration time.
 
-To combat this issue, CMake provides the *generator expression*, a syntax thatenables the user to
+To combat this issue, CMake provides the *generator expression*, a syntax that enables the user to
 both query and conditionally set property values (and other values) during the generation phase.
 
 ## Basics
 
 A generator expression, contrary to what I initially thought, does not generate anything. I thought
-it owuld be something like a list comprehension in Python. Not so. It is simply a way to get
+it would be something like a list comprehension in Python. Not so. It is simply a way to get
 information during **generation**. It has the following form:
 
 ```cmake
@@ -40,7 +40,7 @@ $<1:val>  # Returns "val"
 $<0:val>  # Returns ""
 ```
 
-Unlike the rest of CMake, enerator expressions are strict in that they only accept `1` or `0` for
+Unlike the rest of CMake, generator expressions are strict in that they only accept `1` or `0` for
 true and false, respectively. To convert a CMake value to one of these values, we use the provided
 `$<BOOL:...>` which will return either of the two accepted values.
 
