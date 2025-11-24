@@ -87,10 +87,10 @@ First, let's review variables for a bit. I thought I understood variables, but
 thinking about them requires more precision in C++. For instance, I mistakenly
 believed that global variables are only those variables defined at file scope.
 This is not the case. More accurately, any variable that is declared/defined
-outside of a function is a global variable. Meaning, a global variable lives in
-*namespace* scope (including the global namespace, a.k.a file scope).
+outside of *block scope* (think: a function, for loop, if/else, etc.) is a non-local variable.
 
-This is important because **global variables have
+This is important because **variables with namespace scope, non-thread-storage duration, or
+that were declared `static` or `extern` have
 [static storage duration](https://en.cppreference.com/w/cpp/language/storage_duration.html)**;
 they live for as long as the program executes (and are initialized before
 `main()` executes). These two facts will be important later.
@@ -148,7 +148,8 @@ dynamically-initialized variable W, V will be initialized before W.
 Secondly, if some ordered non-local variable X is defined before some other
 ordered non-local Y *within the same translation unit*, X is initialized before
 Y. Initialization of thread-local units in *different translation units is
-**unspecified***, meaning there is no guarantee of initialization order. 
+**indeterminately specified***, meaning there is no guarantee of initialization order, even
+between runs of the same program on the same machine. 
 
 That latter observation is why the program above has a 50% chance of failure.
 `kDoubleFromName` lives in a different translation unit (`.cpp` file/component)
@@ -182,10 +183,59 @@ variable within a function. The variable will be initialized on the first call
 to the function, which is *guaranteed* to happen *after* `main()` begins its
 execution. As a result, `Foo::kNameFromId` will be initialized by the time
 `kDoubleFromName` (now a static variable in a function) is initialized. 
-
 ```cpp
-// bar.cpp
+// foo.h
 // IMPROVED VERSION
+#ifndef INCLUDED_FOO
+#define INCLUDED_FOO
+
+#include <map>
+#include <string>
+
+namespace statics {
+struct Foo {
+	// Use static functions to access maps instead.
+	auto nameFromId() -> std::map<int, std::string> const&;
+	auto idFromName() -> std::map<std::string, int> kIdFromName const&; 
+};
+}
+#endif // include guard
+//------------------------------------------------------------------------------
+// foo.cpp
+
+#include "foo.h"
+
+namespace statics {
+	
+// Use a function with a static object.
+// The object won't be instantiated until the first time this function is
+// called, so it is guaranteed to be instantiated *after* the static global map.
+
+auto Foo::nameFromId() -> std::map<int, std::string> const& {
+    static const std::map<int, std::string> kNameFromId {
+        {0, "tjdwill"},
+        {1, "notTjdwill"},
+    };
+    
+    return kNameFromId;
+};
+
+auto idFromName() -> std::map<std::string, int> const& {
+
+    static const std::map<std::string, int> kIdFromName {
+        {nameFromId().at(0), 0},
+        {nameFromId().at(1), 1},
+    };
+
+    return kIdFromName;
+}
+}
+//------------------------------------------------------------------------------
+// bar.h
+// ...
+//------------------------------------------------------------------------------
+// bar.cpp
+
 #include "bar.h"
 
 #include <foo.h>
@@ -196,30 +246,22 @@ execution. As a result, `Foo::kNameFromId` will be initialized by the time
 
 namespace // unnamed namespace
 {
-// Use a function with a static object.
-// The object won't be instantiated until the first time this function is
-// called, so it is guaranteed to be instantiated *after* the static global map.
-auto doubleFromName() -> std::map<std::string, double> const&
+const std::map<std::string, double> kDoubleFromName
 {
-	static const std::map<std::string, double> doublesMap
-	{
-		{statics::Foo::kNameFromId.at(0), 0.0},
-		{statics::Foo::kNameFromId.at(1), 1.0},
-	};
-	return doublesMap;
-}
+	{statics::Foo::nameFromId().at(0), 0.0},
+	{statics::Foo::nameFromId().at(1), 1.0},
+};
 }
 
 int main()
 {
-	// This will always work since `doubleFromName` is called during `main`'s 
-	// execution. The inner static variable is guaranteed to be initialized
-	// after the global variables and static data members.
-	std::cout << doubleFromName.at(statics::Foo::kNameFromId.at(0)) << "\n";
+	std::cout << kDoubleFromName.at(statics::Foo::nameFromId().at(0)) << "\n";
 }
 ```
 
-### Why Did The `inline` Solution Work?
+
+
+### Why Does the `inline` Solution Work?
 
 As noted previously, inlining `Foo:kNameFromId` also works as a solution:
 
@@ -234,19 +276,16 @@ As noted previously, inlining `Foo:kNameFromId` also works as a solution:
 namespace statics {
 struct Foo {
 	// some static variables
-	static const std::map<int, std::string> kNameFromId; 
-	static const std::map<std::string, int> kIdFromName; 
-};
+	static inline const std::map<int, std::string> kNameFromId{
+        {0, "tjdwill"},
+        {1, "notTjdwill"},
+    };
+	static inline const std::map<std::string, int> kIdFromName 
 
-inline const std::map<int, std::string> Foo::kNameFromId {
-	{0, "tjdwill"},
-	{1, "notTjdwill"},
-};
-
-// This is fine. kNameFromId is defined above in the same TU.
-inline const std::map<std::string, int> Foo::kIdFromName {
-	{kNameFromId.at(0), 0},
-	{kNameFromId.at(1), 1},
+    {
+        {kNameFromId.at(0), 0},
+        {kNameFromId.at(1), 1},
+    };
 };
 }
 #endif // include guard
@@ -270,9 +309,9 @@ inline const std::map<std::string, int> Foo::kIdFromName {
 
 namespace // unnamed namespace
 {
-// This WORKS because Foo::kNameFromId is inlined.
-const std::map<std::string, double> kDoubleFromName
-{
+// This WORKS because Foo::kNameFromId is inlined; kNameFromId is defined in this TU via
+// the include directive.
+const std::map<std::string, double> kDoubleFromName {
 	{statics::Foo::kNameFromId.at(0), 0.0},
 	{statics::Foo::kNameFromId.at(1), 1.0},
 };
@@ -295,8 +334,14 @@ because it's inlined. Since the `#include` directive that defines
 with the associated rules. In other words, the program is no longer susceptible
 to SIOF, making `inline` a potential solution. 
 
+**23 November 2025 NOTE**: After further exposure, the `inline` solution does not work in
+all cases. See rule 1 on dynamic initialization to learn more, but the gist is that
+initialization order is indeterminately sequenced for inlined static data members of
+template classes. This ended up biting me a few months ago, so I'm making a note of
+caution here.
+
 There is a discussion to be had about which solution is better architecturally,
-but my primary concern was understanding *why* the solutions work. I know have a
+but my primary concern was understanding *why* the solutions work. I now have a
 better understanding than I did before.
 
 ## References
