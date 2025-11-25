@@ -175,7 +175,7 @@ Disassembly of section .text:
 
 ```
 
-## Building the cppbuild static library
+## Building the `cppbuild` Static Library (`libcppbuild.a`)
 
 We'll first be building a static library. This archives all of object files in the
 `cppbuild` library, allowing the binary code to be copied into the resulting compiled
@@ -196,7 +196,7 @@ cppbuild/build> ar rcs libcppbuild.a add.o subtract.o
 
 And that's it! Now, since we followed the static library naming convention, we can link to the `cppbuild` library.
 
-## Building `cppbuild` Shared library (`libcppbuild.so`)
+## Building the `cppbuild` Shared Library (`libcppbuild.so`)
 
 To build the `cppbuild` as a shared library, we change the compilation of the individual
 components to be position independent using the `-fPIC` flag:
