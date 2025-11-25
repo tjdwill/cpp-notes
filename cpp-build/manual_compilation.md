@@ -1,5 +1,7 @@
 # Manual Compilation In C++
 
+Date: 24 November 2025
+
 The build process for C++ was both daunting and enigmatic when I began learning the language. Now, after further
 experience with both the language and Linux, the process is much more palatable,
 at least for the basics. In this article, I will walk through compiling a complete program,
@@ -20,7 +22,7 @@ subtract integers. Here is the program:
 
 int main() {
   if (cppbuild::add(1, 3) != 4 || cppbuild::subtract(3, 3) != 0) {
-    throw std::runtime_error("Incorrect add implementation.");
+    throw std::runtime_error("Incorrect add or subtract implementation.");
   }
 
   std::cout << "Success!" << "\n";
@@ -101,8 +103,8 @@ For our purposes, here are the steps to build a C++ program:
 One can print preprocessor output to the screen by using the `-E` option flag (side note:
 I'm using clang):
 
-```bash
-clangbuild$ clang++ -E src/add.hpp
+```console
+cppbuild> clang++ -E src/add.hpp
 ```
 
 More options can be found in [the preprocessor options
@@ -113,10 +115,10 @@ page](https://clang.llvm.org/docs/ClangCommandLineReference.html#preprocessor-op
 You can stop the build process after the compilation step by specifying the `-S` flag. This
 produces a `.s` file that shows the assembly produced from compilation.
 
-```bash
-cppbuild$ mkdir build && cd build
-cppbuild/build$ clang++ -S $projectDir/src/add.cpp
-cppbuild/build$ cat add.s
+```console
+cppbuild> mkdir build && cd build
+cppbuild/build> clang++ -S $projectDir/src/add.cpp
+cppbuild/build> cat add.s
 	.text
 	.file	"add.cpp"
 	.globl	_ZN8cppbuild3addEii             # -- Begin function _ZN8cppbuild3addEii
@@ -151,10 +153,10 @@ _ZN8cppbuild3addEii:                    # @_ZN8cppbuild3addEii
 
 We can stop at producing the binary object file `.o` using the `-c` flag:
 
-```bash
-cppbuild$ cd build
-cppbuild/build$ clang++ -o add.o -c $projectDir/src/add.cpp
-cppbuild/build$ objdump -d add.o
+```console
+cppbuild> cd build
+cppbuild/build> clang++ -o add.o -c $projectDir/src/add.cpp
+cppbuild/build> objdump -d add.o
 
 add.o:     file format elf64-x86-64
 
@@ -181,15 +183,15 @@ executable.
 
 First, we need to compile the individual library object files:
 
-```bash
-cppbuild/build$ clang++ -o add.o -c $projectDir/src/add.cpp
-cppbuild/build$ clang++ -o subtract.o -c $projectDir/src/subtract.cpp
+```console
+cppbuild/build> clang++ -o add.o -c $projectDir/src/add.cpp
+cppbuild/build> clang++ -o subtract.o -c $projectDir/src/subtract.cpp
 ```
 
 Next, we archive the object files using the `ar` command (learn more via `man ar`):
 
-```bash
-cppbuild/build$ ar rcs libcppbuild.a add.o subtract.o
+```console
+cppbuild/build> ar rcs libcppbuild.a add.o subtract.o
 ```
 
 And that's it! Now, since we followed the static library naming convention, we can link to the `cppbuild` library.
@@ -199,17 +201,17 @@ And that's it! Now, since we followed the static library naming convention, we c
 To build the `cppbuild` as a shared library, we change the compilation of the individual
 components to be position independent using the `-fPIC` flag:
 
-```bash
-cppbuild/build$ mkdir so # Shared library directory
-cppbuild/build$ clang++ -o so/add.o -c $projectDir/src/add.cpp -fPIC
-cppbuild/build$ clang++ -o so/subtract.o -c $projectDir/src/subtract.cpp -fPIC
+```console
+cppbuild/build> mkdir so # Shared library directory
+cppbuild/build> clang++ -o so/add.o -c $projectDir/src/add.cpp -fPIC
+cppbuild/build> clang++ -o so/subtract.o -c $projectDir/src/subtract.cpp -fPIC
 ```
 
 Next, we coalesce the binaries into a shared object file:
 
-```bash
-cppbuild/build$ clang++ -o so/libcppbuild.so -shared add.o subtract.o
-cppbuild/build$ ls -lhgFG so
+```console
+cppbuild/build> clang++ -o so/libcppbuild.so -shared add.o subtract.o
+cppbuild/build> ls -lhgFG so
 total 24K
 -rw-r--r-- 1 976 Nov 24 21:12 add.o
 -rwxr-xr-x 1 16K Nov 24 21:12 libcppbuild.so*
@@ -219,8 +221,8 @@ total 24K
 Now, we need to register the shared library in order for it to be found by the loader at
 runtime. Assuming administrator access, run the following:
 
-```bash
-cppbuild/build$ sudo ldconfig $projectDir/build/so
+```console
+cppbuild/build> sudo ldconfig $projectDir/build/so
 ```
 
 This adds the shared libraries under the input directory to the list of discovered libraries. Restart your shell.
@@ -228,8 +230,8 @@ This adds the shared libraries under the input directory to the list of discover
 If you don't have super user access (`sudo`), edit the `LD_LIBRARY_PATH` environment
 variable:
 
-```bash
-cppbuild/build$ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$projectDir/build/so
+```console
+cppbuild/build> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$projectDir/build/so
 ```
 
 ## Compiling `main`
@@ -239,19 +241,19 @@ discoverable by adding the relevant directories to the compiler's search paths. 
 
 ### Statically-linked `main`
 
-```bash
-cppbuild/build$ clang++ -o mainStatic $projectDir/src/main.cpp -I$projectDir/src
+```console
+cppbuild/build> clang++ -o mainStatic $projectDir/src/main.cpp -I$projectDir/src
 -L$projectDir/build -lcppbuild
-cppbuild/build$ ./mainStatic
+cppbuild/build> ./mainStatic
 Success!
 ```
 
 ### Dynamically-linked `main` (shared library)
 
-```bash
-cppbuild/build$ clang++ -o mainShared $projectDir/src/main.cpp -I$projectDir/src
+```console
+cppbuild/build> clang++ -o mainShared $projectDir/src/main.cpp -I$projectDir/src
 -L$projectDir/build/so -lcppbuild
-cppbuild/build$ ./mainShared
+cppbuild/build> ./mainShared
 Success!
 ```
 
