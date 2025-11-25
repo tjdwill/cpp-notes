@@ -257,6 +257,29 @@ cppbuild/build> ./mainShared
 Success!
 ```
 
+When all is said and done, here is the final project directory structure:
+
+```
+├── build
+│   ├── add.o
+│   ├── libcppbuild.a
+│   ├── mainShared
+│   ├── mainStatic
+│   ├── so
+│   │   ├── add.o
+│   │   ├── libcppbuild.so
+│   │   └── subtract.o
+│   └── subtract.o
+└── src
+    ├── add.cpp
+    ├── add.hpp
+    ├── main.cpp
+    ├── subtract.cpp
+    └── subtract.hpp
+```
+
+## Conclusion 
+
 And there we have it: we've manually compiled a C++ program that uses an external
 library. The important parts were:
 
