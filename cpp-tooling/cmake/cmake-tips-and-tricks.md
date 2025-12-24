@@ -46,6 +46,20 @@ endif()
 Important to note that this command expects a list of strings instead of one
 long string.
 
+Windows doesn't have symbolic link support in the sense of Unix symbolic links. To get around this, I create a custom target that copies the `compile_commands.json` from the relevant build directory to the top-level directory:
+
+```cmake
+elseif( CMAKE_HOST_WIN32 )
+
+  add_custom_target(copyCompilationDatabase ALL
+
+    COMMAND powershell "Copy-Item -Path ${CMAKE_BINARY_DIR}/compile_commands.json -Destination ${CMAKE_SOURCE_DIR}/compile_commands.json"
+    VERBATIM
+  )
+```
+
+I then set `clangd`'s `compile-commands-dir` argument to point to the top-level project directory.
+
 READ MORE:
 
  - https://cmake.org/cmake/help/book/mastering-cmake/chapter/Custom%20Commands.html
