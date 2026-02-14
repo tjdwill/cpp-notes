@@ -73,3 +73,10 @@ generated `moc` file manually in order to compile successfully.
 For some `foo.cpp`, you would include `#include "foo.moc"` **after** all of the
 `Qt`-specific structures are defined. The above source recommends doing so at the end of
 the file.
+
+## Qt Keywords
+
+Qt provides the ability to use `emit` and others as keywords. While I initially preferred this to the macro versions (ex. `Q_EMIT`), but, after coming across a symbol collision in which a third party library *also* used some function with named `emit` something-or-another (the third party developers were kind enough to fix this after I submitted a bug report), I now prefer the macros.  
+
+We can enforce the use of the macros in a project by setting the `QT_NO_KEYWORDS` variable.
+This can be done, for example, by `add_compile_definitions(QT_NO_KEYWORDS)`

@@ -57,13 +57,13 @@ See the docs).
       context menu's location to be aligned relative to a widget, use
       [`QWidget::maptoGlobal()`](https://doc.qt.io/qt-6/qwidget.html#mapToGlobal)
 
-### QMenuBar
+### `QMenuBar`
 
 Typically, we interact with the `QMenuBar` in the context of a `QMainWindow`.
 Just call the main window's `menuBar()` method to receive the handle to the
 `QMenuBar` object. Add menus and separators as desired.
 
-However, we can also create menu bars ourselves. It is improtant to note that we
+However, we can also create menu bars ourselves. It is important to note that we
 don't need to set the layout or position of the menu bar manually; the menu bar
 is automatically moved to the top of its parent widget. Study the following
 example program I wrote:
@@ -109,3 +109,4 @@ int main(int argc, char* argv[])
     return app.exec();
 }
 ```
+
