@@ -81,3 +81,17 @@ One thing I had to learn was that `CMAKE_PREFIX_PATH` is to be specified as an
 environment variable instead of a cache variable. Otherwise, CMake won't be able
 to find the necessary CMake command files associated with packages loaded via
 `find_package()`.
+
+## Inheritance
+
+I recently learned that a preset can inherit from multiple other presets. This
+allows us to compose presets, building the project configuration from
+primitives. For example, you can have hidden presets that each define a specific
+aspect of a CMake configuration (generator, compiler, unity/non-unity build,
+etc.) as well as a configuration that has basic cacheVariablse defined for your
+project. Then, those presets can be composed by passing an array as the value to
+the `inherits` key.
+
+Note that if you inherit from multiple presets that define the same variable
+with conflicting values, CMake will prefer the earliest value. This means, you
+need to list the preset with the desired value *before* the conflicting presets.
