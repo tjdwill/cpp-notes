@@ -366,4 +366,23 @@ int main() {
 
 ```
 
-Weak pointers take the value of null when the tracked object is destroyed. It's a great sigil for this use case where we want to be able to detect and remove invalid objects from the registry. I use a `std::forward_list` instead of a ``std::vector`` to store the weak_ptrs because of the structure's simplicity when removing items. 
+Weak pointers take the value of null when the tracked object is destroyed. It's
+a great sigil for this use case where we want to be able to detect and remove
+invalid objects from the registry. I use a `std::forward_list` instead of a
+``std::vector`` to store the weak_ptrs because of the structure's simplicity
+when removing items. 
+
+## Note on symbols
+
+*This will be imprecise initially, but I plan to refine the following as I learn more.*
+
+It would appear that not exporting a symbol from a given library will result in
+the static initialization being skipped; the linker never links those symbols.
+This is especially true if attempting to perform static registration from code
+compiled in a static library.
+
+Refer to the following for more:
+
+- [Factory With Self-Registering
+  Types](https://www.cppstories.com/2018/02/factory-selfregister/)
+- [Static Variables Initialization in a Static Library, Example](https://www.cppstories.com/2018/02/static-vars-static-lib/)
