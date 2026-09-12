@@ -148,8 +148,8 @@ dynamically-initialized variable W, V will be initialized before W.
 Secondly, if some ordered non-local variable X is defined before some other
 ordered non-local Y *within the same translation unit*, X is initialized before
 Y. Initialization of thread-local units in *different translation units is
-**indeterminately specified***, meaning there is no guarantee of initialization order, even
-between runs of the same program on the same machine. 
+**indeterminately specified***, meaning there is no guarantee of initialization
+order, even between runs of the same program on the same machine. 
 
 That latter observation is why the program above has a 50% chance of failure.
 `kDoubleFromName` lives in a different translation unit (`.cpp` file/component)

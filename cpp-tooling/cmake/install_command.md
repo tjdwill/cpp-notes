@@ -69,4 +69,6 @@ See the [NSIS Download Page](https://nsis.sourceforge.io)
 
 ## Creating a Config File
 
+See the article about [creating a find_package config file](./find_package_config.md) 
+
 ## 
